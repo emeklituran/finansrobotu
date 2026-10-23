@@ -6,9 +6,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Finans">
-<meta name="theme-color" content="#0f5c6e">
-<title>Finans Robotu - Mobil</title>
-<!-- Telefon sürümü · kaynak: src\ (derle.ps1 ile üretilir; bu dosyayı doğrudan düzenleme) -->
+<title>Finans ve Borç Robotu</title>
+<!-- PC sürümü · kaynak: src\ (derle.ps1 ile üretilir; bu dosyayı doğrudan düzenleme) -->
 <style>
 /* ===== Tasarım sistemi (23.10.2026): aydınlık, sade; beyaz / açık gri yüzey, antrasit metin, yeşil vurgu =====
    Renkler yalnızca buradaki değişkenlerden gelir; koyu tema aynı değişkenleri yeniden tanımlar.
@@ -304,53 +303,82 @@ table.rt td b{font-weight:600}
   #pr th,#pr td{border-bottom:1px solid #bbb;padding:2pt 4pt;text-align:left;font-size:9pt;color:#000;background:none}
   #pr tr{page-break-inside:avoid}
 }
-/* ---- Telefon düzeni (ortak stilin üstüne) ---- */
-body{padding-bottom:0}
-main,main#app{max-width:560px;margin:0 auto;padding:10px 14px calc(88px + env(safe-area-inset-bottom,0px))}
-body.locked main{padding-top:20px}
-.mtop{display:flex;align-items:center;gap:6px;margin:4px 0 10px}
-.mtop h1{flex:1;font-size:22px;margin:0}
-.mtop button{width:42px;padding:0;font-size:18px}
-#tb{position:fixed;left:0;right:0;bottom:0;z-index:15;display:grid;grid-template-columns:repeat(5,1fr);background:var(--sf);border-top:1px solid var(--ln);padding-bottom:env(safe-area-inset-bottom,0px)}
-#tb button{border:0;border-radius:0;background:none;min-height:60px;padding:6px 2px;font-size:11px;color:var(--mu);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
-#tb button b{font-size:21px;font-weight:400;line-height:1}
-#tb button.on{color:var(--ac);font-weight:600;box-shadow:inset 0 3px var(--ac)}
-body.locked #tb{display:none}
-.nb{background:var(--bad);color:#fff;border-radius:10px;padding:0 6px;font-size:11px;font-weight:600}
-.big{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:8px 0 14px}
-.big button{min-height:88px;border-radius:14px;font-size:15px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px}
-.big button b{font-size:30px;font-weight:400;line-height:1}
-.big button.p b{filter:grayscale(0)}
-.hero{background:var(--sf);border:1px solid var(--ln);border-radius:14px;padding:14px;margin-bottom:10px}
-.hero small{color:var(--mu);display:block}
-.hero .v{font-size:30px;font-weight:600;letter-spacing:-.02em}
-.row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-top:1px solid var(--ln)}
-.row:first-child{border-top:0}
-.row>span:first-child{min-width:0}
-.row small{display:block;color:var(--mu);font-size:12px}
-.row b{white-space:nowrap}
-.box{background:var(--sf);border:1px solid var(--ln);border-radius:12px;padding:4px 12px;margin:8px 0}
-/* Pencereler alttan açılan sayfa gibi */
-#m>div{position:absolute;left:0;right:0;bottom:0;margin:0;width:100%;max-width:none;max-height:92vh;overflow:auto;border-radius:16px 16px 0 0;padding:16px 16px calc(18px + env(safe-area-inset-bottom,0px))}
-#m2>div{margin-top:8vh}
-#m .ac button,.mset button.tile{min-height:46px}
-.pad{grid-template-columns:repeat(3,76px)}.pad button{width:76px;height:76px}
+
+/* ===== Telefon (Y4, v17): aynı tam uygulama; dokunma alanları büyür, pencereler tam ekran, geniş tablolar kart olur ===== */
+@media (max-width:899px){
+  button{min-height:44px}
+  button.sm{min-height:44px;padding:6px 12px}
+  .chips button{min-height:44px}
+  button.th{min-height:0}
+  .sub button{min-height:46px}
+  summary{padding:11px 0;min-height:44px}
+  details.it>summary{padding:6px 0}
+  button.tag{min-height:26px}
+  input[type=checkbox],input[type=radio]{width:22px;height:22px}
+  input:not([type=checkbox]):not([type=radio]),select{min-height:46px}
+  #m>div{margin:0;width:100%;max-width:none;min-height:100%;border-radius:0;border:0;box-shadow:none;padding:calc(16px + env(safe-area-inset-top,0px)) 16px calc(16px + env(safe-area-inset-bottom,0px))}
+  #m>div>.ac:last-child{position:sticky;bottom:0;z-index:1;background:var(--sf);margin:14px -16px calc(-16px - env(safe-area-inset-bottom,0px));padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--ln2)}
+  #m>div>.ac:last-child>button{flex:1 1 auto}
+  #m2>div{margin:8vh auto}
+  body:not(.locked)::before{content:"";position:fixed;top:0;left:0;right:0;height:calc(62px + env(safe-area-inset-top,0px));background:var(--bg);box-shadow:0 1px 0 var(--ln);z-index:13} /* üst düğmeler kayan içeriğin üstünde okunur kalsın */
+  #fabm{left:12px;right:12px;min-width:0}
+  #fabm button{min-height:48px}
+  .cd{min-height:48px}
+}
+@media (max-width:640px){
+  table.ct,table.ct>tbody,table.ct>tbody>tr,table.ct>tbody>tr>td{display:block;width:100%}
+  table.ct tr.ch{display:none}
+  table.ct>tbody>tr{padding:10px 14px;border-bottom:1px solid var(--ln)}
+  table.ct>tbody>tr:last-child{border-bottom:0}
+  table.ct>tbody>tr>td{display:flex;justify-content:space-between;align-items:center;gap:12px;border:0;padding:3px 0;text-align:right!important;white-space:normal!important;min-width:0}
+  table.ct>tbody>tr>td::before{content:attr(data-l);color:var(--mu);font-size:12px;font-weight:500;text-align:left;flex:0 1 45%}
+  table.ct>tbody>tr>td.c0{display:block;text-align:left!important;font-size:14px;font-weight:600;padding:0 0 4px}
+  table.ct>tbody>tr>td.c0::before,table.ct>tbody>tr>td[data-l=""]::before{content:none}
+  table.ct>tbody>tr>td[data-l=""]{justify-content:flex-end}
+  table.ct>tbody>tr>td.x{justify-content:flex-end;flex-wrap:wrap;padding-top:6px}
+  table.ct>tbody>tr>td.x::before{content:none}
+  table.ct>tbody>tr>td.hdl,table.ct>tbody>tr>td:empty{display:none}
+  table.ct td input{min-width:0;max-width:60%}
+  table.ct tr:hover td{background:none}
+  .tw:has(table.ct){overflow:visible}
+}
 </style>
 </head>
 <body>
+<header id="top"></header>
 <main id="app"></main>
 <div id="m"><div id="mf"></div></div>
 <div id="m2"><div id="m2f"></div></div>
 <div id="eb"></div>
 <div id="pr"></div>
 <input type="file" id="fi" accept=".json" hidden>
-<div id="tb" role="navigation" aria-label="Ana menü">
-  <button data-a="mt" data-t="oz"><b>🏠</b>Özet</button>
-  <button data-a="mt" data-t="ekle"><b>➕</b>Ekle</button>
-  <button data-a="mt" data-t="onay"><b>✅</b><span>Onaylar</span></button>
-  <button data-a="mt" data-t="borc"><b>💳</b>Hesaplar</button>
-  <button data-a="mt" data-t="ayar"><b>⚙️</b>Ayarlar</button>
+<button id="mn" data-a="menu" aria-label="Menüyü aç veya kapat" aria-expanded="false">☰</button>
+<button id="gz" data-a="gz" aria-label="Tutarları gizle veya göster" title="Tutarları gizle / göster (P)">👁</button>
+<button id="th" data-a="th" aria-label="Temayı değiştir" title="Tema: cihaza göre / açık / koyu">◐</button>
+<button id="fab" data-a="fab" aria-label="Hızlı işlem" title="Hızlı işlem" aria-expanded="false">+</button>
+<div id="fabm" role="menu">
+  <button data-a="fabx" data-c="har">🛒 Harcama ekle</button>
+  <button data-a="fabx" data-c="income">💰 Gelir ekle</button>
+  <button data-a="fabx" data-c="trf">🔁 Transfer</button>
+  <button data-a="fabx" data-c="pay">💳 Ödeme yap</button>
+  <button data-a="fabx" data-c="sms">📋 Metinden (SMS) ekle</button>
+  <button data-a="fabx" data-c="ab">🤔 Alabilir miyim?</button>
 </div>
+<div id="bk" data-a="menu"></div>
+<nav aria-label="Ana menü">
+  <div class="brand"><i aria-hidden="true">F</i><div><b>Finans ve Borç</b><small>Kişisel finans</small></div></div>
+  <div class="ns">Menü</div>
+  <button data-a="tab" data-t="panel"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg><span class="nl">Özet</span><span class="kb">1</span></button>
+  <button data-a="tab" data-t="gel"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg><span class="nl">Gelirler</span><span class="kb">2</span></button>
+  <button data-a="tab" data-t="gid"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="M2.5 10h19M6.5 15h4"/></svg><span class="nl">Giderler</span><span class="kb">3</span></button>
+  <button data-a="tab" data-t="kasa"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9.5 12 4l9 5.5M5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 20h18"/></svg><span class="nl">Kasa</span><span class="kb">4</span></button>
+  <button data-a="tab" data-t="strat"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5M4 19h16M8 15l3.5-4 3 2.5L20 7"/></svg><span class="nl">Strateji</span><span class="kb">5</span></button>
+  <button data-a="tab" data-t="set"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg><span class="nl">Ayarlar</span><span class="kb">6</span></button>
+  <div class="nf">
+    <button data-a="lock"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4.5" y="11" width="15" height="10" rx="2"/><path d="M8 11V7.5a4 4 0 0 1 8 0V11"/></svg><span class="nl">Kilitle</span></button>
+    <div class="priv">Veriler bu cihazda, şifreli</div>
+  </div>
+</nav>
 <script>
 "use strict";
 /* Kod iki katmandan oluşur:
@@ -463,7 +491,7 @@ function cleanP(p) {
 }
 /* Kullanıcı ayarları */
 const VIEWK = ["panel", "gel", "gid", "kasa", "strat", "set"];
-const SETD = () => ({tema: "light", kilit: 5, acilis: "panel", vh: "", gizle: false, ayBas: 1, onay: {ek: true, gel: true, gid: true}, bhedef: null, sonYedek: 0, hat: 14, enf: null, icg: true, rozet: true, kur: false, kurT: 0, icgx: [], koruma: 0});
+const SETD = () => ({tema: "light", kilit: 5, acilis: "panel", vh: "", gizle: false, ayBas: 1, onay: {ek: true, gel: true, gid: true}, bhedef: null, sonYedek: 0, hat: 14, enf: null, icg: true, rozet: true, kur: false, kurT: 0, icgx: [], koruma: 0, ky: "", kyT: 0});
 function cleanSet(s) {
   const d = SETD();
   s = s && typeof s === "object" ? s : {};
@@ -472,7 +500,7 @@ function cleanSet(s) {
     acilis: VIEWK.includes(ac) ? ac : d.acilis, vh: safeId(s.vh), gizle: !!s.gizle, ayBas: Math.max(1, Math.min(28, Math.round(toN(s.ayBas)) || 1)),
     onay: {ek: on.ek !== false, gel: on.gel !== false, gid: on.gid !== false}, bhedef: s.bhedef == null || s.bhedef === "" ? null : Math.max(0, toN(s.bhedef)),
     sonYedek: Math.max(0, toN(s.sonYedek)), hat: [0, 7, 14, 30].includes(+s.hat) ? +s.hat : d.hat,
-    enf: s.enf == null || s.enf === "" ? null : Math.max(-50, Math.min(500, toN(s.enf))), icg: s.icg !== false, rozet: s.rozet !== false, kur: !!s.kur, kurT: Math.max(0, toN(s.kurT)), icgx: arr(s.icgx).map(x => String(x).slice(0, 80)).slice(-100), koruma: Math.max(0, toN(s.koruma))}; // koruma: kasanın altına inmemesi istenen tutar (kuruş) // icgx: gizlenen içgörü anahtarları
+    enf: s.enf == null || s.enf === "" ? null : Math.max(-50, Math.min(500, toN(s.enf))), icg: s.icg !== false, rozet: s.rozet !== false, kur: !!s.kur, kurT: Math.max(0, toN(s.kurT)), icgx: arr(s.icgx).map(x => String(x).slice(0, 80)).slice(-100), koruma: Math.max(0, toN(s.koruma)), ky: String(s.ky || "").slice(0, 80), kyT: Math.max(0, toN(s.kyT))}; // ky: yedek klasörünün adı (tanıtıcı IndexedDB fp-ky'de) · kyT: son klasör yedeğinin zamanı // koruma: kasanın altına inmemesi istenen tutar (kuruş) // icgx: gizlenen içgörü anahtarları
   // sonYedek: son şifreli yedek zamanı · hat: yedek hatırlatma aralığı (gün; 0 kapalı) · enf: yıllık enflasyon varsayımı (%) · icg: içgörüler · rozet: rozetler · kur: internetten döviz kuru
 }
 
@@ -671,8 +699,8 @@ function load() {
   return cs.length ? mig(cs[0]) : mig(sample());
 }
 /* Kayıt: salt okunur sekme yazmaz; kilit başka sekmeye geçtiyse yazmadan salt okunura döner; hata yutulmaz, yazılan veri okunup doğrulanır */
-function save() {
-  S.t = Date.now();
+function save(keepT) {
+  if (!keepT) S.t = Date.now(); // keepT: yalnızca yedek damgası gibi veri sayılmayan bir alan yazılırken son değişiklik zamanı korunur
   snapNow();
   pruneAkt(S);
   if (!KEY || RO) return;
@@ -2372,6 +2400,17 @@ function warnings() {
   calItems().forEach(c => { if (c[2] < 0 && c[0] <= 5) w.push([c[0] < 0 ? "r" : "", c[1] + " " + dayTxt(c[0])]) });
   return w;
 }
+/* Telefonda geniş tablolar kart görünümüne geçer (Y4): başlık satırındaki adlar her hücreye etiket olarak yazılır, görünüm CSS'te (≤ 640 px).
+   Masaüstünde tablo aynen kalır; veri ve hesap değişmez. */
+function cardTables(root) {
+  (root || document.getElementById("app")).querySelectorAll("table").forEach(t => {
+    const rs = [...t.rows], h = rs[0];
+    if (!h || ![...h.cells].every(c => c.tagName === "TH") || rs.length < 2) return;
+    const ad = []; [...h.cells].forEach(c => { for (let j = 0; j < (c.colSpan || 1); j++) ad.push(c.textContent.replace(/\s+/g, " ").trim()) });
+    h.classList.add("ch"); t.classList.add("ct");
+    rs.slice(1).forEach(r => { let i = 0, ilk = true; [...r.cells].forEach(c => { if (c.tagName === "TD") { c.dataset.l = ad[i] || ""; if (ilk && !c.classList.contains("hdl")) { c.classList.add("c0"); ilk = false } } i += c.colSpan || 1 }) });
+  });
+}
 /* [ÇEKİRDEK] Etiketler: notlardaki #kelime */
 const TAGRE = /#([\p{L}\p{N}_-]{2,30})/gu;
 const tagsOf = s => [...new Set([...String(s || "").matchAll(TAGRE)].map(m => m[1].toLocaleLowerCase("tr")))];
@@ -2514,6 +2553,472 @@ function netChart() {
     '<p class="mu" style="margin:2px 0 0;font-size:13px"><span style="color:var(--ac)">━</span> Net varlık · <span style="color:var(--ok)">┅</span> Birikim ve yatırım · son ' + ks.length + ' dönem</p>';
 }
 
+/* ---------- Özet ---------- */
+function vFlowBox(s) {
+  return '<div class="tw"><table><tr><th>' + esc(perL(CP())) + '</th><th>Tutar</th></tr>' +
+    [["Gelir", s.inc], ["Beklenen tahsilat", s.alacAy], ["Sabit giderler (nakit/hesap)", -s.expC], ["Harcamalar (nakit/hesap)", -s.har], ["Transferler (kişiye/diğer)", -s.trOut], ["Borç ödemeleri (asgari/taksit)", -s.load]].map(r => '<tr><td>' + r[0] + '</td><td>' + tl(r[1]) + '</td></tr>').join("") +
+    '<tr><td><b>' + GOST.kalan.ad + '</b></td><td><b>' + col(s.rem) + '</b></td></tr></table></div>' +
+    (s.expK ? '<p class="mu" style="font-size:13px">Kartla ödenen sabit giderler (' + tl(s.expK) + ') bu tabloda ayrıca düşülmez: karta yazılır ve kart ödemesiyle (borç ödemeleri satırı) nakitten çıkar; iki kez sayılmaz.</p>' : "") +
+    '<h3>Nakit tahmini</h3>' + (() => { const f = forecast(S, 90); return '<div class="tw"><table><tr><th>Ne zaman</th><th>Tahmini kasa</th></tr>' + [0, 7, 30, 60, 90].map(d => '<tr><td>' + (d ? d + " gün sonra" : "Bugün") + '</td><td>' + (d ? est(f.at(d)) : tl(f.at(0))) + '</td></tr>').join("") + '<tr><td>En düşük nokta</td><td>' + minTxt(f) + '</td></tr></table></div>' })() + '<div class="ac"><button class="sm" data-a="navTo" data-t="kasa" data-s="tah">Ayrıntılı nakit tahmini →</button></div>' +
+    '<p class="mu">Tahminde gelir ve ödeme günleri, taksitler, kart ekstreleri ve son 3 dönemin ortalama harcaması (' + tl(s.harAvg) + ') kullanılır. Kart harcamaları kart ödemesiyle yansır.</p>';
+}
+/* Kategoride bu dönem harcanan (Harcamalar ekranındaki bütçe tablosuyla aynı hesap) */
+const katSpent = (x, cp = CP()) => sum(live(S.har).filter(h => perOf(h.tar) === cp && h.kat === x), h => h.tut);
+function vPanel() {
+  const s = stats(), w = warnings(), op = calItems(), prev = (S.snap || {})[perAdd(CP(), -1)], tv = tavsiye(), hedef = S.set.bhedef != null ? S.set.bhedef : tv.v, bb = birThis(), cp = CP();
+  const tile = (t, sub, label, val, extra = "", cls = "") => '<div class="st' + cls + (t ? ' lk" data-a="navTo" data-t="' + t + '" data-s="' + sub : "") + '"><small>' + label + '</small><b>' + val + '</b>' + extra + '</div>';
+  const pc = hedef > 0 ? Math.min(100, Math.round(bb / hedef * 100)) : 0;
+  // 1. satır: kasa (son 30 gün hareketlerden) + bu dönem gelir, gider, kalan
+  const hero = '<div class="hx lk" data-a="navTo" data-t="kasa" data-s="oz" title="Kasa\'ya git"><small>Kasa toplamı</small><div class="v">' + tl(s.kasa) + '</div>' +
+    '<small>banka ' + tl(s.bank) + ' · nakit ' + tl(s.cash) + ' · birikim/yatırım ' + tl(s.birT) + '</small>' + liqSpark() +
+    '<div class="hl"><span>Banka + nakit<b>' + tl(s.liq) + '</b></span><span>Birikim ve yatırım<b>' + tl(s.birT) + '</b></span></div></div>';
+  const kc = (ic, cls, t, sub, label, val, extra) => tile(t, sub, label, val, extra, " kc").replace('<small>', '<span class="ic' + cls + '" aria-hidden="true">' + ic + '</span><small>');
+  const row1 = '<div class="kpi">' + hero +
+    kc("↘", "", "gel", "gel", "Bu dönem gelir", tl(s.inc), s.alacAy ? '<small>+ beklenen tahsilat ' + tl(s.alacAy) + '</small>' : '<small>' + esc(perL(cp)) + '</small>') +
+    kc("↗", " o", "gid", "exp", "Bu dönem gider", tl(s.exp + s.har), '<small>sabit ' + tl(s.exp) + ' · harcama ' + tl(s.har) + '</small>') +
+    kc("◎", " n", "", "", GOST.kalan.ad, col(s.rem), '<small title="' + GOST.kalan.f + '">gerçekleşen + kalan planlar · borç ödemeleri ' + tl(s.load) + '</small>') + '</div>';
+  // 2. satır: geçen dönem biriktirebildiğin, net varlık, alacak, borç, faiz, kart limiti
+  const gecen = tv.src === "gecen" ? tile("", "", GOST.gecen.ad, tl(tv.v), '<small title="' + GOST.gecen.f + '">' + esc(perL(tv.per)) + ' · hesap hareketlerinden</small>')
+    : tile("", "", GOST.gecen.ad, '<span class="mu">hesaplanamadı</span>', '<small>Geçen dönemin hesap hareketi yok. Yerine ' + GOST.plan.ad.toLocaleLowerCase("tr") + ': ' + tl(Math.max(0, s.serbest)) + '</small>');
+  const row2 = '<div class="g kpi2 tiles" style="margin-top:14px">' + gecen +
+    tile("", "", "Net varlık", col(s.net), '<small>' + (prev ? "Geçen döneme göre " + col(s.net - prev.net, sgn(s.net - prev.net)) + " · birikim ve yatırım " + col(s.birT - prev.bir, sgn(s.birT - prev.bir)) : "kasa + alacak − borç") + '</small>') +
+    tile("gel", "alac", "Alacaklar", tl(s.alacT)) +
+    tile("gid", "loans", "Toplam borç", tl(s.tot), '<small>aylık ödeme ' + tl(s.load) + '</small>') +
+    tile("", "", "Aylık faiz maliyeti (vergili)", est(s.monthInt)) +
+    tile("gid", "cards", "Kart limiti / boş", tl(s.lim), '<small>' + tl(s.availC) + ' boş</small>') + '</div>';
+  // Nakit akışı grafiği (son 6 dönem; perAkis — "geçen dönem biriktirebildiğin" ile aynı tanım)
+  const pers = [5, 4, 3, 2, 1, 0].map(i => perAdd(cp, -i)), ak = pers.map(p => ({per: p, ...perAkis(p)})), dol = ak.filter(a => a.n && a.per !== cp);
+  const flow = '<div class="pnl"><div class="ph"><div><h2>Nakit akışı</h2><p class="mu">Hesaplarına giren ve çıkan para, son 6 dönem</p></div></div>' +
+    '<div class="lg"><span><i style="background:var(--c-in)"></i>Giren</span><span><i style="background:var(--c-out)"></i>Çıkan</span><span><i style="background:var(--c-net);height:3px;vertical-align:3px"></i>Net</span></div>' + cfChart(ak) +
+    '<div class="fs"><div><small>Ortalama giren</small><b>' + (dol.length ? tl(Math.round(sum(dol, a => a.gir) / dol.length)) : "—") + '</b></div><div><small>Ortalama çıkan</small><b>' + (dol.length ? tl(Math.round(sum(dol, a => a.cik) / dol.length)) : "—") + '</b></div>' +
+    '<div><small>' + esc(perL(cp)) + ' net (devam ediyor)</small><b>' + col(ak[5].net) + '</b></div></div>' +
+    '<p class="mu" style="font-size:12px;margin:8px 0 0">Kendi hesapların arası transferler, açılış kayıtları ve bakiye düzeltmeleri sayılmaz; birikime aktarılan para çıkan sayılmaz. Tamamlanmış dönemlerin ortalaması (' + dol.length + ' dönem). Kart harcamaları kart ödemesi yapıldığında çıkan olur.</p></div>';
+  // Bütçe planı: kullanıcının belirlediği kategori bütçeleri (varsayılan bütçe yok)
+  const brs = kats().filter(x => S.bt[x] > 0), tb = sum(brs, x => S.bt[x]), ts = sum(brs, x => katSpent(x, cp));
+  const budget = '<div class="pnl"><div class="ph"><div><h2>Bütçe planı</h2><p class="mu">' + esc(perL(cp)) + ' · kategori bütçeleri</p></div>' + (tb ? '<span class="bd' + (ts > tb ? " r" : " g") + '">%' + Math.round(ts / tb * 100) + ' kullanıldı</span>' : "") + '</div>' +
+    (brs.length ? brs.map(x => { const b = S.bt[x], sp = katSpent(x, cp), r = sp / b; return '<div class="bp"><div class="t"><b>' + esc(x) + (S.btU[x] ? " 🔔" : "") + '</b><span>' + tl(sp) + ' / ' + tl(b) + '</span></div><div class="bar"><i style="width:' + Math.min(100, Math.round(r * 100)) + '%;background:var(--' + (r > 1 ? "bad" : r > .9 ? "warn" : "c-in") + ')"></i></div><small class="' + (sp > b ? "bad" : "") + '">' + (sp > b ? tl(sp - b) + " aşıldı" : tl(b - sp) + " kaldı") + '</small></div>' }).join("") +
+      '<div class="ln" style="margin-top:6px;padding-top:10px"><span><b style="color:var(--ink)">' + tl(ts) + ' / ' + tl(tb) + '</b></span><span class="' + (ts > tb ? "bad" : "ok") + '">' + (ts > tb ? tl(ts - tb) + " aşıldı" : tl(tb - ts) + " kaldı") + '</span></div>'
+      : '<p class="mu">Kategori bütçesi tanımlı değil. Bütçeyi sen belirlersin; varsayılan bütçe yoktur.</p>') +
+    '<div class="ac"><button class="sm" data-a="bt">Bütçeyi düzenle</button><button class="sm" data-a="navTo" data-t="gid" data-s="har">Harcamalar →</button></div></div>';
+  // Birikim hedefi ve hedefler
+  const {gs} = goals();
+  const save_ = '<div class="pnl"><div class="ph"><div><h2>Birikim ve hedefler</h2><p class="mu">Bu dönem ve hedeflerin</p></div></div>' +
+    '<div class="st" style="box-shadow:none;background:var(--sf2)"><small>Bu dönem birikim hedefi' + (S.set.bhedef != null ? " (senin hedefin)" : " (geçen döneme göre)") + '</small><b>' + tl(hedef) + '</b>' +
+      '<div class="bar"><i style="width:' + pc + '%;background:var(--c-in)"></i></div><small>Birikime aktarılan: ' + tl(bb) + ' (%' + pc + ')</small>' +
+      '<small>' + (tv.src === "gecen" ? "Dayanak: " + GOST.gecen.ad.toLocaleLowerCase("tr") + " (" + esc(perL(tv.per)) + ") " + tl(tv.v) + "." : "Dayanak: geçen dönem hareket kaydı olmadığı için " + GOST.plan.ad.toLocaleLowerCase("tr") + " (" + tl(tv.v) + ").") + '</small>' +
+      '<div class="ac"><button class="sm" data-a="bhm">Hedefi değiştir</button><button class="sm p" data-a="trfm" data-c="bir">Birikime aktar</button></div></div>' +
+    gs.slice(0, 3).map(g => { const p = g.hedef ? Math.min(100, Math.round(g.cur / g.hedef * 100)) : 0; return '<div class="bp"><div class="t"><b>' + esc(g.ad) + '</b><span class="ok">%' + p + '</span></div><div class="bar"><i style="width:' + p + '%;background:var(--c-in)"></i></div><small>' + tl(g.cur) + ' / ' + tl(g.hedef) + ' · ' + (g.need <= 0 ? "tamamlandı" : g.eta ? "tahmini " + monL(g.eta) : "serbest nakit yetmiyor") + '</small></div>' }).join("") +
+    '<div class="ac"><button class="sm" data-a="navTo" data-t="kasa" data-s="hdf">Hedeflere git →</button></div></div>';
+  // Son hesap hareketleri (gerçek kayıtlar)
+  const rl = [...live(S.led)].sort((a, b) => b.t - a.t).slice(0, 7), kind = l => l.tip === "transfer-c" || l.tip === "transfer-g" || l.tip === "transfer-b" ? "tr" : l.d > 0 ? "in" : "out";
+  const recent = '<div class="pnl"><div class="ph"><div><h2>Son hareketler</h2><p class="mu">Hesaplarındaki son kayıtlar</p></div><button class="sm" data-a="hfa">Tümü →</button></div>' +
+    (rl.length ? '<div class="tw"><table class="rt"><tr><th>İşlem</th><th>Hesap</th><th>Tür</th><th class="n">Tutar</th></tr>' + rl.map(l => '<tr><td><b>' + esc(l.ac || LT[l.tip] || l.tip) + '</b><small>' + dt(l.tar) + '</small></td><td>' + esc(accName(l.acc)) + '</td><td><span class="sd ' + kind(l) + '">' + esc(LT[l.tip] || l.tip) + '</span></td><td class="n"><b>' + col(l.d, (l.d > 0 ? "+" : "−") + tl(Math.abs(l.d))) + '</b></td></tr>').join("") + '</table></div>'
+      : '<p class="mu">Henüz hesap hareketi yok. Gelir, harcama, ödeme ve transferler hesap seçildiğinde burada görünür.</p>') + '</div>';
+  // Yaklaşan ödeme ve gelirler: 14 gün içindekiler kart olarak, ayın kalanı liste olarak
+  const soon = op.filter(c => c[0] <= 14), later = op.filter(c => c[0] > 14), due = sum(soon.filter(c => c[2] < 0), c => -c[2]);
+  const uc = c => { const d = pDate(dAdd(c[0])); return '<div class="uc' + (c[0] < 0 && c[2] < 0 ? " late" : "") + '"><span class="d"><b>' + d.getDate() + '</b><small>' + MN[d.getMonth()].slice(0, 3) + '</small></span><span class="n">' + c[1] + '</span><span class="a ' + (c[2] > 0 ? "ok" : "") + '">' + (c[2] > 0 ? "+" : "") + tl(Math.abs(c[2])) + '</span><small class="s">' + dayTxt(c[0]) + '</small></div>' };
+  const upc = '<div class="pnl"><div class="ph"><div><h2>Bekleyen ödeme ve gelirler</h2><p class="mu">Önümüzdeki 14 gün, sonra ayın kalanı</p></div><button class="sm" data-a="fabx" data-c="pay">Ödeme yap</button></div>' +
+    (op.length ? (soon.length ? '<div class="up">' + soon.slice(0, 6).map(uc).join("") + '</div>' : '<p class="mu">Önümüzdeki 14 günde bekleyen kayıt yok.</p>') +
+      (soon.length > 6 || later.length ? '<h3>Ayın kalanı</h3>' + soon.slice(6).concat(later).map(c => '<div class="ln"><span>' + dayTxt(c[0]) + ' · ' + c[1] + '</span><span class="' + (c[2] > 0 ? "ok" : "") + '">' + (c[2] > 0 ? "+" : "") + tl(Math.abs(c[2])) + '</span></div>').join("") : "") +
+      '<div class="ln" style="margin-top:10px;padding-top:10px"><span>' + soon.filter(c => c[2] < 0).length + ' ödeme · 14 gün</span><span><b style="color:var(--ink)">Toplam ödeme: ' + tl(due) + '</b></span></div>'
+      : '<p class="mu">Bu ay bekleyen ödeme veya gelir yok.</p>') + '</div>';
+  const alerts = '<div class="pnl"><h2>Uyarılar</h2>' + (w.map(x => '<div class="w ' + x[0] + '">' + x[1] + '</div>').join("") || '<p class="mu">Uyarı yok.</p>') + insightHtml() + '</div>';
+  return '<div class="pg"><div><h1>Genel bakış</h1><p class="mu">Hesapların, planların ve yaklaşan ödemelerin — bu cihazdaki kayıtlarından</p></div></div>' + row1 + row2 +
+    '<div class="og c3">' + flow + budget + save_ + '</div>' +
+    '<div class="og c2">' + recent + upc + '</div>' +
+    '<div class="og c2">' + alerts + '<div class="pnl"><h2>Takvim</h2>' + vCal() + '</div></div>' +
+    '<div class="og c2"><div class="pnl"><h2>Net varlık ve birikim</h2>' + netChart() + '<h2>Dönem nakit akışı</h2>' + vFlowBox(s) + '</div><div class="pnl"><h2>Borç dağılımı</h2>' + pie(s.D.map(d => [d.ad, d.bal])) +
+    '<p class="mu">Faiz ve getiri tutarları tahmindir (~); banka ekstresiyle teyit et.</p></div></div>';
+}
+
+/* ---------- Gelirler ---------- */
+let GL = "gel";
+function vIncome() {
+  const cp = CP(), l = live(S.income), duz = bySira(l.filter(o => o.tur === "duz")), dig = l.filter(o => o.tur !== "duz");
+  const ger = sum(live(S.odm).filter(x => x.col === "income" && perOf(x.tar) === cp), x => x.tut) + sum(dig.filter(o => perOf(o.tar) === cp), o => o.tut);
+  let h = '<h1>Gelirler</h1><div class="g tiles"><div class="st"><small>Düzenli gelir (aylık)</small><b>' + tl(sum(duz, o => o.tut)) + '</b></div><div class="st"><small>' + esc(perL(cp)) + ' gerçekleşen</small><b>' + tl(ger) + '</b><small>onaylanan + tek seferlik + avans</small></div></div>' +
+    '<div class="ac"><button class="p" data-a="add" data-c="income">+ Gelir ekle <span class="kb">G</span></button></div><h2>Düzenli gelirler</h2>';
+  duz.forEach(o => {
+    const s = thisDue(o), done = gelDone(o, s), pend = gelPend(o, S, true), av = avOf(o, "9999-12-31");
+    h += R("income", o, esc(o.ad), [
+      ["Tutar", tl(o.tut)], ["Gelir günü", "her ayın " + o.gun + ". günü"], ["Yattığı hesap", o.acc ? esc(accName(o.acc)) : '<span class="warn">seçilmedi</span>'], ["Kategori", esc(o.kat)],
+      ["Bu ay", done ? '<span class="ok">✅ yattı</span>' : pend.length ? '<span class="warn">⏳ onay bekliyor</span>' : dayTxt(daysTo(s))]
+    ].concat(av.length ? [["Mahsup edilecek avans", tl(sum(av, a => a.tut)) + " → beklenen " + tl(gelExp(o, "9999-12-31"))]] : []),
+      {b: '<span class="bd">düzenli</span>', ex: done && !pend.length ? "" : btn("gel", "income", o.id, "Gelir girişi", "p"), foot: payHist("income", o), dg: "income"});
+  });
+  if (!duz.length) h += '<p class="mu">Düzenli gelir yok.</p>';
+  const fg = fapply("gtek", dig.sort((a, b) => (b.tar || "").localeCompare(a.tar || "")), {tar: o => o.tar, tut: o => o.tut, txt: o => o.ad + " " + (o.kat || ""), tags: o => tagsOf(o.ad + " " + (o.kat || "")), src: o => o.acc});
+  h += '<h2>Tek seferlik gelirler ve avanslar</h2>' + (dig.length ? fbar("gtek", {tag: 1, src: bySira(live(S.acc)).map(a => [a.id, a.ad]), srcL: "Hesap"}) + fsum(fg, o => o.tut) : "") + tbl("gtek", [
+    {h: "Tarih", v: o => o.tar, f: o => dt(o.tar)}, {h: "Ad", v: o => o.ad, f: o => tagHtml(o.ad)}, {h: "Tür", v: o => o.tur, f: o => GT[o.tur]},
+    {h: "Hesap", v: o => accName(o.acc), f: o => o.acc ? esc(accName(o.acc)) : "-"},
+    {h: "Not", f: o => o.tur === "avans" ? (o.mah ? esc(perL(o.mah)) + " maaşından düşüldü" : "sonraki maaştan düşülecek") : tagHtml(o.kat)},
+    {h: "Tutar", n: 1, v: o => o.tut, f: o => tl(o.tut)}, {h: "", x: 1, f: o => btn("del", "income", o.id, "Sil", "sm")}
+  ], fg, dig.length ? "Filtreye uyan kayıt yok." : "Tek seferlik gelir veya avans yok.");
+  return h + '<p class="mu">Düzenli gelir günü geldiğinde açılışta onay penceresi çıkar; onaylayınca tutar bağlı hesaba eklenir. Tek seferlik gelir ve avans girildiği anda hesaba eklenir; silinirse geri alınır.</p>';
+}
+function vGelW() {
+  return subB("gl", [["gel", "Gelirler"], ["alac", "Alacaklar"]], GL) + (GL === "gel" ? vIncome() :
+    '<h1>Alacaklar</h1><p class="mu">Başkalarının sana olan borçları. Beklenen tahsilatlar nakit akışına girer.</p><button class="p" data-a="add" data-c="alac">+ Alacak ekle</button>' +
+    bySira(live(S.alac)).map(o => R("alac", o, esc(o.kim), hLines(o, false), {ex: o.kalan > 0 ? btn("pay", "alac", o.id, "Tahsil et", "p") : "", foot: payHist("alac", o), dg: "alac"})).join(""));
+}
+
+/* ---------- Giderler ---------- */
+let GS = "exp";
+const GSUB = [["exp", "Sabit giderler"], ["abo", "Abonelikler"], ["har", "Harcamalar"], ["loans", "Krediler"], ["cards", "Kartlar"], ["kmh", "KMH"], ["elden", "Elden borçlar"]];
+function hLines(o, isDebt) {
+  const mp = monthPaid(o), l = [["Toplam / kalan", tl(o.top) + " / " + tl(o.kalan)]], dn = isDebt ? "ödendi" : "tahsil edildi", nd = isDebt ? "ödenmedi" : "tahsil edilmedi";
+  if (o.sekil === "tks") l.push(["Taksit", tl(o.tks) + " · her ayın " + o.gun + ". günü · kalan " + o.kal + "/" + o.say],
+    ["Bu ay", o.kalan <= 0 ? '<span class="ok">✅ kapandı</span>' : mp >= Math.min(o.tks, o.kalan) ? '<span class="ok">✅ ' + dn + '</span>' : '<span class="bad">✖ ' + nd + '</span> · ' + dayTxt(dueIn(o.gun))]);
+  else l.push(["Vade", o.kalan <= 0 ? '<span class="ok">✅ kapandı</span>' : o.vade ? dt(o.vade) + " · " + dayTxt(daysTo(o.vade)) : "belirsiz"]);
+  if (isDebt) l.push(["Faiz", o.oran > 0 ? "%" + o.oran + " " + PR(o) : "faizsiz"]);
+  if (o.bas) l.push(["Başlangıç", dt(o.bas)]);
+  if (o.not) l.push(["Not", esc(o.not)]);
+  return l;
+}
+const tksList = o => {
+  const l = tksOf(o);
+  return l.length ? '<details><summary>Taksit detayı (' + l.length + ')</summary>' + l.map(t => '<div class="ln"><span>' + esc(t.ad) + ' · ' + t.no + '/' + t.top + '</span><span>' + tl(t.tut) + ' ' + btn("edit", "tks", t.id, "Düzenle", "sm") + ' ' + btn("del", "tks", t.id, "Sil", "sm") + '</span></div>').join("") + '</details>' : "";
+};
+function vCard(o) {
+  const s = cardSt(o), bal = cardBal(o), ta = tksAy(o), tk = tksKal(o), tn = tksOf(o).length, r = cardR(o), gr = cardGR(o), y = new Date().getFullYear(), ms = misses(o, y), ao = asgOnly(o), ne = needEk(o);
+  const risk = Math.round(s.left * r + s.due * (gr - r) + o.avans * avR());
+  const hb = harIn(o, fmtD(lastKesim(o)), "9999-12-31"), tr = tier(o.donem);
+  const badge = {bos: '<span class="mu">Bu dönem borç yok</span>', tam: '<span class="ok">✅ Tamamı ödendi</span>', asg: '<span class="ok">✅ Asgari ödendi</span> · kalan dönem borcu ' + tl(s.left),
+    kismi: '<span class="warn">◐ Kısmi ödendi</span> · asgariye ' + tl(s.due) + ' kaldı', yok: '<span class="bad">✖ Ödenmedi</span>'}[s.k];
+  return R("cards", o, esc(o.bank), [
+    ["Limit / kullanılabilir", tl(o.limit) + " / " + tl(o.limit - bal)],
+    ["Dönem borcu", tl(o.donem) + " · kesim " + dtn(lastKesim(o)) + (ne ? ' <span class="bad">· yeni ekstre bekleniyor</span>' : "")],
+    ["Asgari ödeme", tl(s.a) + (o.asgEl != null ? " (elle)" : " (otomatik %" + Math.round(asgPct(o) * 100) + ")")],
+    ["Son ödeme", dt(o.son) + " · " + dayTxt(daysTo(o.son))],
+    ["Bu dönem", badge + (s.pd ? " · ödenen " + tl(s.pd) : "")],
+    ["Toplam güncel borç", tl(o.borc)],
+    ["Nakit avans", tl(o.avans) + (o.avans && o.avansTar ? " · " + dt(o.avansTar) + " tarihinden beri faiz işliyor" : "")],
+    ["Taksitler", "gelecek ay " + tl(ta) + " · kalan toplam " + tl(tk) + (tn ? " (" + tn + " kalem)" : "")],
+    ["Faiz (aylık)", "akdi %" + (o.oran > 0 ? o.oran + " " + PR(o) + " (kart)" : tr.akdi + " (TCMB kademesi)") + " · gecikme %" + (o.gecOran > 0 ? o.gecOran : tr.gec) + " · nakit avans %" + S.p.avans.akdi],
+    ["Bu dönem ödenmezse faiz", est(risk)],
+    ["Yalnızca asgari ödersen", ao ? (ao.m ? "~" + ao.m + " ayda kapanır, toplam faiz " + est(ao.int) : "borç yok") : '<span class="bad">kapanmıyor</span>'],
+    ["Bu yıl ödenmeyen asgari", ms + (o.gecEl && o.gecEl[y] != null ? " (elle)" : "") + (ms >= 2 ? ' <span class="bad">· 3. kezde nakit çekime kapanır</span>' : "")],
+    ["Harcama takibi", (o.mod === "harcama" ? "harcama esas" : "ekstre esas") + " · bu dönem harcadıkların " + tl(sum(hb, x => x.tut))]
+  ], {b: '<span class="bd' + (o.yap === "gecikmis" ? " r" : "") + '">' + YP[o.yap] + '</span> <span class="bd">' + (o.kul === "acik" ? "kullanıma açık" : "kapalı") + '</span>',
+    ex: o.out ? "" : btn("pay", "cards", o.id, "Ödeme yap", "p") + btn("ek", "cards", o.id, "Ekstre gir") + btn("tksadd", "cards", o.id, "Taksit ekle") + btn("yap", "cards", o.id, "Yapılandırma"),
+    foot: tksList(o) + payHist("cards", o), dg: "cards"});
+}
+function vDebt(sub) {
+  let h = '<h1>' + GSUB.find(x => x[0] === sub)[1] + '</h1><button class="p" data-a="add" data-c="' + sub + '">+ ' + (sub === "elden" ? "Elden borç ekle" : "Ekle") + '</button>';
+  if (sub === "loans") bySira(live(S.loans)).forEach(o => {
+    const mp = monthPaid(o), half = o.yapKart && o.kalan > o.ilk / 2;
+    h += R("loans", o, esc(o.bank) + " · " + esc(o.tur), [
+      ["Başlangıç tarihi", dt(o.bas)],
+      ["Kalan anapara", tl(o.kalan) + " / " + tl(o.ilk)],
+      ["Faiz", o.oran + "% " + PR(o) + " (efektif yıllık ~%" + (effYear(o) * 100).toFixed(1) + ")"],
+      ["Taksit", tl(o.taksit) + " · her ayın " + o.gun + ". günü"],
+      ["Kalan taksit", o.kal + " / " + o.vade],
+      ["Kalan toplam faiz", est(Math.max(0, o.taksit * o.kal - o.kalan))],
+      ["Tahmini erken kapama", est(o.kalan)],
+      ["Bu ay", o.kalan <= 0 ? '<span class="ok">✅ Kredi kapandı</span>' : mp >= o.taksit ? '<span class="ok">✅ Taksit ödendi</span>' : '<span class="bad">✖ Ödenmedi</span> · ' + dayTxt(dueIn(o.gun)) + (mp ? " · ödenen " + tl(mp) : "")]
+    ], {b: (o.gec ? '<span class="bd r">gecikmede</span> ' : "") + (half ? '<span class="bd r">%50 ödenene kadar kart limiti artmaz</span>' : ""),
+      ex: o.kalan > 0 && !o.out ? btn("pay", "loans", o.id, "Ödeme yap", "p") : "", foot: payHist("loans", o), dg: "loans"});
+  });
+  if (sub === "cards") bySira(live(S.cards)).forEach(o => h += vCard(o));
+  if (sub === "kmh") bySira(live(S.kmh)).forEach(o => {
+    const m = Math.round(o.kul * er(o));
+    h += R("kmh", o, esc(o.bank) + " KMH", [
+      ["Limit / kalan limit", tl(o.limit) + " / " + tl(o.limit - o.kul)],
+      ["Kullanılan (kapatma tutarı)", tl(o.kul)],
+      ["Aylık faiz", "%" + o.oran + " (" + PR(o) + "), vergili %" + (er(o) * 100).toFixed(2)],
+      ["Günlük / aylık tahmini maliyet", est(Math.round(m / 30)) + " / " + est(m)],
+      ["Bu ay ödenecek faiz (kalan)", est(kmhDue(o))]
+    ], {ex: o.kul > 0 && !o.out ? btn("pay", "kmh", o.id, "Ödeme yap", "p") : "", foot: payHist("kmh", o), dg: "kmh"});
+  });
+  if (sub === "elden") bySira(live(S.elden)).forEach(o => h += R("elden", o, esc(o.kime), hLines(o, true), {b: o.onc ? '<span class="bd">öncelikli</span>' : "", ex: o.kalan > 0 ? btn("pay", "elden", o.id, "Ödeme yap", "p") : "", foot: payHist("elden", o), dg: "elden"}));
+  return h + '<p class="mu">"Ödeme yap" borcu ve seçtiğin hesabın bakiyesini düşer; yanlış ödemeyi ödeme geçmişinden geri alabilirsin. Eski kayıtlar toplamlara girmez.</p>';
+}
+function vExpense() {
+  let h = '<h1>Sabit giderler</h1><p class="mu">Kira, fatura gibi her ay tekrarlayan kalemler. Ödeme günü onay penceresi çıkar; onaylanınca seçtiğin yönteme göre işlenir ve Harcamalar\'da görünür.</p>' +
+    '<div class="st"><small>' + esc(perL(CP())) + ' toplam sabit gider</small><b>' + tl(expNow(S)) + '</b></div><div class="ac"><button class="p" data-a="add" data-c="expense">+ Sabit gider ekle</button></div>';
+  bySira(live(S.expense)).forEach(o => {
+    const s = thisDue(o), inP = expIn(o, s), done = gidDone(o, s), pend = gidPend(o, S, true);
+    h += R("expense", o, esc(o.ad), [["Tutar", tl(o.tut)], ["Ödeme günü", o.ysk === "yil" ? "her yıl " + o.gun + " " + MN[o.yay - 1] : "her ayın " + o.gun + ". günü"], ["Dönem", o.ay ? esc(perL(o.ay)) : o.ysk === "yil" ? "yıllık" : "her ay"],
+      ["Ödeme yöntemi", yonTxt(o) + (o.oto ? " · otomatik talimat" : "")], ["Kategori", tagHtml(o.kat)],
+      ["Bu ay", !inP ? "bu ay yok" + (o.ysk === "yil" ? " · sonraki " + dt(nextRen(o)) : "") : done ? '<span class="ok">✅ ödendi</span>' : pend.length ? '<span class="warn">⏳ işlenmedi</span>' : dayTxt(daysTo(s))]],
+      {b: (o.abo ? '<span class="bd">abonelik</span> ' : "") + (o.ay && o.ay !== CP() ? '<span class="bd">bu döneme girmez</span>' : ""), ex: inP && (!done || pend.length) ? btn("gid", "expense", o.id, "Ödendi olarak işle", "p") : "", dg: "expense"});
+  });
+  return h;
+}
+/* Abonelikler: "abonelik" işaretli sabit giderler; aylık eşdeğer ve yıllık maliyet */
+function vAbo() {
+  const l = bySira(live(S.expense).filter(o => o.abo)), mon = o => o.ysk === "yil" ? Math.round(o.tut / 12) : o.tut, yr = o => o.ysk === "yil" ? o.tut : o.tut * 12;
+  return '<h1>Abonelikler</h1><p class="mu">Dijital servisler ve üyelikler. Sabit giderlerde "Abonelik" işaretli kalemler burada toplanır; ödeme günü onayları sabit giderlerle aynı şekilde çalışır. Yıllık yenilemeden 7 gün önce Özet\'te uyarı çıkar.</p>' +
+    '<div class="g tiles"><div class="st"><small>Aylık toplam (eşdeğer)</small><b>' + tl(sum(l, mon)) + '</b></div><div class="st"><small>Yıllık toplam</small><b>' + tl(sum(l, yr)) + '</b></div><div class="st"><small>Abonelik sayısı</small><b>' + l.length + '</b></div></div>' +
+    '<div class="ac"><button class="p" data-a="add" data-c="expense" data-s="abo">+ Abonelik ekle</button></div>' +
+    tbl("abo", [{h: "Ad", v: o => o.ad, f: o => esc(o.ad)}, {h: "Sıklık", v: o => o.ysk, f: o => o.ysk === "yil" ? "Yıllık (" + MN[o.yay - 1] + ")" : "Aylık"}, {h: "Ödeme", f: o => yonTxt(o)},
+      {h: "Sonraki yenileme", v: o => nextRen(o), f: o => dt(nextRen(o)) + " · " + dayTxt(daysTo(nextRen(o)))}, {h: "Tutar", n: 1, v: o => o.tut, f: o => tl(o.tut)},
+      {h: "Aylık eşdeğer", n: 1, v: mon, f: o => tl(mon(o))}, {h: "Yıllık", n: 1, v: yr, f: o => tl(yr(o))}, {h: "", x: 1, f: o => btn("edit", "expense", o.id, "Düzenle", "sm") + btn("del", "expense", o.id, "Sil", "sm")}],
+      l, 'Abonelik yok. "+ Abonelik ekle" ile ya da sabit gider eklerken "Abonelik" kutusunu işaretleyerek ekleyebilirsin.', {k: "abo", c: "expense"});
+}
+function vHar() {
+  const cp = CP(), l = live(S.har).sort((a, b) => b.tar.localeCompare(a.tar) || b.t - a.t), m = l.filter(h => perOf(h.tar) === cp);
+  const spent = x => katSpent(x, cp), rows = kats().filter(x => S.bt[x] > 0 || spent(x) > 0);
+  let h = '<h1>Harcamalar</h1><div class="g tiles"><div class="st"><small>' + esc(perL(cp)) + ' toplam</small><b>' + tl(sum(m, x => x.tut)) + '</b><small>sabit giderler dahil</small></div>' +
+    '<div class="st"><small>Kartla</small><b>' + tl(sum(m.filter(x => x.yon === "kart"), x => x.tut)) + '</b><small>nakit / hesaptan: ' + tl(sum(m.filter(x => x.yon !== "kart"), x => x.tut)) + '</small></div></div>' +
+    '<div class="ac"><button class="p" data-a="add" data-c="har">+ Harcama ekle <span class="kb">H</span></button><button data-a="fabx" data-c="sms">📋 Metinden ekle</button><button data-a="bt">Bütçeyi düzenle</button></div>';
+  const src = h2 => h2.yon === "kart" ? "k:" + h2.kart : h2.yon === "hesap" ? "a:" + h2.acc : "n:";
+  const fl = fapply("har", l, {tar: x => x.tar, tut: x => x.tut, txt: x => x.kat + " " + (x.not || ""), kat: x => x.kat, tags: x => tagsOf(x.not), src});
+  const tags = Object.entries(allTags()).sort((a, b) => b[1].out - a[1].out).slice(0, 12);
+  h += '<div class="cols"><div><h2>Kayıtlar</h2>' + fbar("har", {kat: 1, tag: 1, src: [["n:", "Nakit"]].concat(bySira(act(S.cards)).map(c => ["k:" + c.id, c.bank + " kartı"]), bySira(live(S.acc)).map(a => ["a:" + a.id, a.ad]))}) + fsum(fl, x => x.tut) + tbl("har", [
+    {h: "Tarih", v: x => x.tar, f: x => dt(x.tar)}, {h: "Kategori", v: x => x.kat, f: x => esc(x.kat) + (x.gid ? ' <span class="bd">sabit</span>' : "") + (x.src === "metin" ? ' <span class="bd">metinden</span>' : "")},
+    {h: "Ödeme", v: x => x.yon, f: x => x.yon === "kart" ? esc(cardName(x.kart)) + (x.tks > 1 ? " · " + x.tks + " taksit" : "") : x.yon === "hesap" ? esc(accName(x.acc)) : "nakit"},
+    {h: "Not", f: x => tagHtml(x.not) + (x.gar ? ' <span class="bd' + (daysTo(x.gar) < 0 ? "" : daysTo(x.gar) <= 30 ? " r" : "") + '">garanti ' + dt(x.gar) + '</span>' : "")}, {h: "Tutar", n: 1, v: x => x.tut, f: x => tl(x.tut)},
+    {h: "", x: 1, f: x => '<button class="sm" data-a="foto" data-i="' + esc(x.id) + '" title="' + (x.foto ? "Fiş / fatura fotoğrafını göster" : "Fiş / fatura fotoğrafı ekle") + '" aria-label="Fiş fotoğrafı">' + (x.foto ? "🧾" : "📎") + '</button>' + btn("del", "har", x.id, "Sil", "sm")}
+  ], fl.slice(0, 300), "Kayıt yok.") + (fl.length > 300 ? '<p class="mu">İlk 300 kayıt gösteriliyor; tamamı Excel çıktısında.</p>' : "") + '</div><div>' +
+    '<h2>Etiketler</h2>' + (tags.length ? '<div class="tagl">' + tags.map(([t, x]) => '<button class="tag" data-a="tag" data-c="' + t + '">#' + t + ' · ' + tl(x.out) + '</button>').join("") + '</div>' : '<p class="mu">Notlara #etiket yazarak (ör. #tatil2026) harcamaları gruplayabilirsin.</p>');
+  h += '<h2>Bu dönem kategoriler</h2>' + (rows.length ? '<div class="tw"><table><tr><th>Kategori</th><th>Bütçe</th><th>Harcanan</th><th>Kalan</th></tr>' + rows.map(x => {
+    const b = S.bt[x] || 0, s = spent(x);
+    return '<tr><td>' + esc(x) + (S.btU[x] ? " 🔔" : "") + '</td><td>' + (b ? tl(b) : "-") + '</td><td>' + tl(s) + '</td><td' + (b && s > b ? ' class="bad"' : "") + '>' + (b ? tl(b - s) : "-") + '</td></tr>';
+  }).join("") + '</table></div>' : '<p class="mu">Bu dönem harcama yok.</p>') + '<p class="mu">Bütçeyi sen belirlersin; varsayılan bütçe ve uyarı yoktur. İstersen kategori bazında "aşılınca uyar" (🔔) seçebilirsin.</p></div></div>';
+  return h + '<p class="mu">Harcama düzenlenemez; yanlışsa silip yeniden ekle. Silince hesap bakiyesi ve kart borcu üzerindeki etkisi geri alınır.</p>';
+}
+function vGidW() { return subB("gs", GSUB, GS) + (GS === "exp" ? vExpense() : GS === "abo" ? vAbo() : GS === "har" ? vHar() : vDebt(GS)) }
+
+/* ---------- Kasa ---------- */
+let HS = "oz", HF = "trn", LF = "", BQ = "";
+const KSUB = [["oz", "Özet"], ["banka", "Banka"], ["nakit", "Nakit"], ["mev", "Mevduat"], ["emt", "Emtia"], ["dov", "Döviz"], ["yat", "Yatırım"], ["hdf", "Hedefler"], ["tah", "Nakit tahmini"], ["har", "Hareketler"]];
+const LT = {giris: "Giriş", cikis: "Çıkış", "transfer-c": "Transfer çıkış", "transfer-g": "Transfer giriş", "transfer-b": "Birikime", "transfer-k": "Kişiye", "transfer-d": "Diğer transfer", duzeltme: "Düzeltme", acilis: "Açılış", kapanis: "Kapanış", ters: "Ters kayıt", odeme: "Borç ödemesi", tahsilat: "Tahsilat", harcama: "Harcama", gelir: "Gelir"};
+const FIXED = ["ters", "acilis", "kapanis", "odeme", "tahsilat", "harcama", "gelir", "transfer-b", "transfer-k", "transfer-d"]; // bunlar kendi ekranlarından geri alınır
+const birKZ = b => { const c = birCost(b); return c == null || c <= 0 ? null : birVal(b) - c };
+function vKasaOz() {
+  const s = stats(), l = live(S.bir), prev = (S.snap || {})[perAdd(CP(), -1)], dv = debtVsSave(), {gs} = goals();
+  const wc = l.filter(b => birKZ(b) != null), tc = sum(wc, b => birCost(b)), tg = sum(wc, b => birKZ(b)), prevK = prev ? prev.liq + prev.bir : null;
+  const gv = Object.keys(BG).map(g => [BG[g][0], sum(l.filter(b => BG[g][1].includes(b.tur)), b => birVal(b)), g]);
+  const tile = (sub, label, val, extra = "") => '<div class="st' + (sub ? ' lk" data-a="hs" data-c="' + sub : "") + '"><small>' + label + '</small><b>' + val + '</b>' + extra + '</div>';
+  return '<h1>Kasa</h1><p class="mu" style="margin-top:0">Banka hesapları, nakit, birikim ve yatırımlar</p>' +
+    '<div class="g tiles">' + tile("", "Kasa toplamı", tl(s.kasa), prevK != null ? '<small>geçen döneme göre ' + col(s.kasa - prevK, sgn(s.kasa - prevK)) + '</small>' : "") +
+      tile("banka", "Banka", tl(s.bank)) + tile("nakit", "Nakit", tl(s.cash)) +
+      tile("", "Yatırım kâr / zarar", col(tg, sgn(tg)), '<small>' + (tc ? "%" + (tg / tc * 100).toFixed(1) + " · maliyeti bilinen kalemler" : "maliyet bilgisi yok") + '</small>') +
+      gv.map(x => tile(x[2], x[0], tl(x[1]))).join("") + '</div>' +
+    '<div class="ac"><button class="p" data-a="trfm">Transfer <span class="kb">T</span></button><button data-a="trfm" data-c="bir">Birikime aktar</button><button data-a="addbm">+ Birikim / yatırım ekle</button></div>' +
+    (dv.d && dv.debtWins ? '<div class="w i" style="margin-top:8px">Faiz karşılaştırması: ' + esc(dv.d.ad) + ' borcunun vergili aylık faizi ' + pct(dv.d.r, 2) + ', mevduatlarının en iyi net aylık getirisi ' + pct(dv.sv, 2) + '. Yalnızca bu iki orana göre, bu borca yapılan ödeme birikimin getirisinden daha fazla faiz tasarrufu sağlar; acil durum fonu ve nakit ihtiyacı bu karşılaştırmaya dahil değildir (Strateji).</div>' : "") +
+    '<div class="cols"><div><h2>Dağılım</h2>' + pie([["Banka", s.bank], ["Nakit", s.cash]].concat(gv.map(x => [x[0], x[1]])).filter(x => x[1] > 0)) + '</div>' +
+    '<div><h2>Hedefler</h2>' + (gs.map(g => { const pc = g.hedef ? Math.min(100, Math.round(g.cur / g.hedef * 100)) : 0; return '<div class="ln"><span>' + esc(g.ad) + '</span><span>%' + pc + ' · ' + (g.need <= 0 ? "tamamlandı" : g.eta ? monL(g.eta) : "yetmiyor") + '</span></div><div class="bar" style="height:6px;margin:2px 0 8px"><i style="width:' + pc + '%;background:var(--ok)"></i></div>' }).join("") || '<p class="mu">Hedef yok.</p>') +
+    '<div class="ac"><button class="sm" data-a="hs" data-c="hdf">Hedeflere git</button></div></div></div>';
+}
+function vAccL(kind) {
+  const bank = kind === "banka", l = bySira(live(S.acc).filter(a => isBank(a) === bank));
+  return '<h1>' + (bank ? "Banka hesapları" : "Nakit") + '</h1><p class="mu" style="margin-top:0">' + (bank ? "Vadesiz banka hesapların" : "Cüzdan, ev kasası gibi elde tutulan para") + '</p>' +
+    '<div class="st"><small>Toplam</small><b>' + tl(sum(l.filter(a => !a.out), a => a.bak)) + '</b></div>' +
+    '<div class="ac"><button class="p" data-a="adda" data-c="' + (bank ? "vadesiz" : "nakit") + '">+ ' + (bank ? "Banka hesabı ekle" : "Nakit ekle") + '</button><button data-a="trfm">Transfer</button><button data-a="add" data-c="logs">+ Hareket ekle</button></div>' +
+    tbl("acc-" + kind, [
+      {h: "Ad", v: a => a.ad, f: a => esc(a.ad) + (S.set.vh === a.id ? ' <span class="bd">varsayılan</span>' : "")},
+      {h: "Bakiye tarihi", v: a => a.tar || "", f: a => dt(a.tar)}, {h: "Son güncelleme", v: a => a.t, f: a => dtn(a.t)},
+      {h: "Bakiye", n: 1, v: a => a.bak, f: a => tl(a.bak)},
+      {h: "", x: 1, f: a => btn("hfa", "led", a.id, "Hareketler", "sm") + btn("edit", "acc", a.id, "Düzenle", "sm") + btn("del", "acc", a.id, "Sil", "sm")}
+    ], l, bank ? "Henüz banka hesabı yok." : "Henüz nakit kalemi yok.", {k: "acc-" + kind, c: "acc"}) +
+    '<p class="mu">Bakiyeyi düzenlersen fark hareket kaydına "düzeltme" olarak yazılır.</p>';
+}
+function birDetail(b, at) {
+  const v = birVal(b, at), c = birCost(b), l = [["Grup / tür", BG[Object.keys(BG).find(g => BG[g][1].includes(b.tur))][0] + " · " + BT[b.tur]]], f = arr(b.fiy), lf = f.filter(e => e.tar <= at).pop();
+  if (DEP.includes(b.tur)) {
+    const end = new Date(pDate(b.bas || tod()) - 0 + b.vade * 864e5);
+    l.push(["Anapara", tl(b.ana)], [b.tur === "katilim" ? "Kâr payı / vade" : "Faiz / vade", "%" + b.faiz + " yıllık · " + b.vade + " gün · stopaj %" + b.stopaj],
+      ["Başlangıç → vade sonu", dt(b.bas) + " → " + dtn(end)], ["Vade sonu net getiri", est(depNet(b, b.vade))]);
+  } else if (UNIT.includes(b.tur)) {
+    l.push(["Miktar", b.mik + " " + esc(unitName(b))], ["Ortalama alış", tl(b.alis) + " · " + dt(b.alisTar)], ["Fiyat", tl(priceAt(b, at)) + " · " + (lf ? dt(lf.tar) + (lf.kay === "ecb" ? " · ECB kuru (internetten)" : " girişi") : "alış fiyatı")]);
+  } else if (b.tur === "fon" || b.tur === "hisse") l.push(["Alış (toplam)", tl(b.alis) + " · " + dt(b.alisTar) + (b.mik ? " · " + b.mik + " adet" : "")]);
+  else if (b.tur === "bes") l.push(["Aylık katkı", tl(b.katki)], ["Devlet katkısı", tl(b.dk)]);
+  l.push(["Değer" + (at !== tod() ? " (" + dt(at) + ")" : ""), "<b>" + tl(v) + "</b>"]);
+  if (c != null && c > 0) { const d = v - c; l.push(["Kâr / zarar", col(d, sgn(d) + " (%" + (d / c * 100).toFixed(1) + ")")]) }
+  const hist = DEP.includes(b.tur) || !f.length ? "" : '<details open><summary>Fiyat geçmişi (' + f.length + ')</summary>' + f.map((e, i) => [e, i]).reverse().slice(0, 12).map(([e, i]) => '<div class="ln"><span>' + dt(e.tar) + '</span><span>' + tl(e.f) + ' <button class="sm" data-a="fdel" data-i="' + esc(b.id) + '" data-k="' + i + '">Sil</button></span></div>').join("") + '</details>';
+  return R("bir", b, esc(b.ad), l, {ex: DEP.includes(b.tur) ? "" : btn("price", "bir", b.id, UNIT.includes(b.tur) ? "Fiyat gir" : "Değer gir", "p"), foot: spark(b) + hist});
+}
+function spark(b) {
+  const v = e => UNIT.includes(b.tur) ? b.mik * e : e;
+  const pts = (b.alisTar ? [[b.alisTar, v(birBase(b))]] : []).concat(arr(b.fiy).map(e => [e.tar, v(e.f)]));
+  if (pts.length < 2) return "";
+  const t0 = pDate(pts[0][0]) - 0, t1 = pDate(pts[pts.length - 1][0]) - 0, ys = pts.map(p => p[1]), mn = Math.min(...ys), mx = Math.max(...ys);
+  const xy = pts.map(p => (5 + (pDate(p[0]) - t0) / ((t1 - t0) || 1) * 290).toFixed(1) + "," + (55 - (p[1] - mn) / ((mx - mn) || 1) * 50).toFixed(1)).join(" ");
+  return '<svg class="spark" viewBox="0 0 300 60" preserveAspectRatio="none" role="img" aria-label="Değer geçmişi"><polyline points="' + xy + '" fill="none" stroke="var(--ac)" stroke-width="2" vector-effect="non-scaling-stroke"/></svg>';
+}
+function vBirG(g) {
+  const ts = BG[g][1], l = bySira(live(S.bir).filter(b => ts.includes(b.tur))), at = isD(BQ) ? BQ : tod(), tv = sum(l, b => birVal(b, at)), wc = l.filter(b => birKZ(b) != null), tg = sum(wc, b => birKZ(b));
+  return '<h1>' + BG[g][0] + '</h1>' + (g === "dov" ? '<div class="ac" style="margin-top:0">' + (S.set.kur ? '<button data-a="kurup">🌐 Kurları güncelle</button><span class="mu" style="align-self:center">' + (S.set.kurT ? "son: " + new Date(S.set.kurT).toLocaleString("tr-TR", {dateStyle: "short", timeStyle: "short"}) + " · " : "") + 'kaynak: Avrupa Merkez Bankası (Frankfurter)</span>' : '<span class="mu">Kurları elle giriyorsun. İstersen Ayarlar → Görünüm ve kullanım\'dan internetten kur almayı açabilirsin.</span>') + '</div>' : "") + '<div class="g tiles"><div class="st"><small>Toplam' + (BQ ? " (" + dt(at) + ")" : "") + '</small><b>' + tl(tv) + '</b></div>' +
+    '<div class="st"><small>Kâr / zarar</small><b>' + col(tg, sgn(tg)) + '</b></div></div>' +
+    '<div class="ac">' + ts.map(t => '<button class="' + (t === ts[0] ? "p" : "") + '" data-a="addb" data-c="' + t + '">+ ' + BT[t] + '</button>').join("") +
+    '<button data-a="trfm" data-c="bir">Hesaptan aktar</button><button data-a="bqm">Tarihteki değer</button>' + (BQ ? '<button data-a="bqx">Bugüne dön (' + dt(BQ) + ')</button>' : "") + '</div>' +
+    tbl("bir-" + g, [
+      {h: "Ad", v: b => b.ad, f: b => esc(b.ad)}, {h: "Tür", v: b => BT[b.tur], f: b => BT[b.tur] + (b.tur === "doviz" ? " · " + esc(b.pb) : "")},
+      {h: "Miktar", n: 1, v: b => b.mik || b.ana || 0, f: b => UNIT.includes(b.tur) ? b.mik + " " + esc(unitName(b)) : DEP.includes(b.tur) ? b.vade + " gün" : b.mik ? b.mik + " adet" : "-"},
+      {h: "Maliyet", n: 1, v: b => birCost(b) || 0, f: b => birCost(b) == null ? "-" : tl(birCost(b))}, {h: "Değer", n: 1, v: b => birVal(b, at), f: b => tl(birVal(b, at))},
+      {h: "Kâr / zarar", n: 1, v: b => birKZ(b) || 0, f: b => { const d = birKZ(b); return d == null ? "-" : col(d, sgn(d)) }},
+      {h: "", x: 1, f: b => btn("birm", "bir", b.id, "Detay", "sm") + (DEP.includes(b.tur) ? "" : btn("price", "bir", b.id, UNIT.includes(b.tur) ? "Fiyat" : "Değer", "sm")) + btn("edit", "bir", b.id, "Düzenle", "sm") + btn("del", "bir", b.id, "Sil", "sm")}
+    ], l, "Henüz kayıt yok.", {k: "bir-" + g, c: "bir"}) +
+    '<p class="mu">' + (g === "mev" ? "Mevduat değeri, başlangıçtan bugüne işleyen net faiz / kâr payıyla hesaplanır." : "Fiyatları elle ve tarihiyle girersin; kâr/zarar ve geçmiş değerler bu girişlerden hesaplanır.") + '</p>';
+}
+function vHdf() {
+  const {gs, free} = goals();
+  let h = '<h1>Hedefler</h1><div class="st"><small>' + GOST.plan.ad + ' (tahmini)</small><b>' + col(free) + '</b><small>' + GOST.plan.f + '</small></div><div class="ac"><button class="p" data-a="add" data-c="hdf">+ Hedef ekle</button></div>' + goalCmpHtml();
+  gs.forEach(g => {
+    const pc = g.hedef ? Math.min(100, Math.round(g.cur / g.hedef * 100)) : 0, bar = '<div class="bar"><i style="width:' + pc + '%;background:var(--ok)"></i></div>';
+    const l = [["Biriken / hedef", tl(g.cur) + " / " + tl(g.hedef) + " (%" + pc + ")"], ["Kalan", tl(g.need)]];
+    if (g.tarih) l.push(["Hedef tarih", dt(g.tarih) + " · " + g.ml + " ay"], ["Zamanında ulaşmak için", tl(g.req) + " / ay"]);
+    l.push(["Tahmini ulaşma", g.need <= 0 ? '<span class="ok">✅ tamamlandı</span>' : g.eta ? monL(g.eta) + (g.tarih ? (g.eta > g.ml ? ' <span class="bad">(' + (g.eta - g.ml) + ' ay gecikme)</span>' : ' <span class="ok">(zamanında)</span>') : "") : '<span class="bad">serbest nakit yetmiyor</span>']);
+    const rows = l.map(x => '<div class="ln"><span>' + x[0] + '</span><span>' + x[1] + '</span></div>').join("");
+    if (g.auto) h += '<div class="it"><div class="hd"><b>' + g.ad + '</b><span class="bd">otomatik · ilk hedef</span></div>' + bar + rows + '<p class="mu" style="margin:6px 0 0">Banka ve nakitteki para sayılır.</p></div>';
+    else {
+      const bn = live(S.bir).filter(b => g.bagli.includes(b.id)).map(b => esc(b.ad)).join(", ");
+      h += R("hdf", g, esc(g.ad), [["Bağlı birikimler", bn || "yok"]].concat(l), {b: '<span class="bd">öncelik ' + g.onc + '</span>', foot: bar});
+    }
+  });
+  return h + '<p class="mu">Serbest nakit öncelik sırasına göre dağıtılır: önce ilk hedef tamamlanır, sonra sıradaki. Birikim getirileri hesaba katılmaz.</p>';
+}
+function vMov() {
+  let h = '<h1>Hareketler</h1>' + subB("hf", [["trn", "Transferler"], ["led", "Hesap hareketleri"]], HF, "chips") + '<div class="ac"><button class="p" data-a="trfm">Transfer</button><button data-a="add" data-c="logs">+ Hareket ekle</button></div>';
+  const accO = bySira(live(S.acc)).map(a => [a.id, a.ad]);
+  if (HF === "trn") {
+    const fl = fapply("trn", live(S.trn).sort((a, b) => b.tar.localeCompare(a.tar) || b.t - a.t), {tar: x => x.tar, tut: x => x.tut, txt: x => trnTxt(x) + " " + (x.ac || ""), tags: x => tagsOf(x.ac), src: x => x.from});
+    return h + '<p class="mu">Paranın nereye gittiğini görürsün. Kişiye ve "diğer" transferler harcama sayılmaz ama nakit akışında ayrıca görünür.</p>' + fbar("trn", {tag: 1, src: accO, srcL: "Kaynak hesap"}) + fsum(fl, x => x.tut) + tbl("trn", [
+      {h: "Tarih", v: x => x.tar, f: x => dt(x.tar)}, {h: "Tür", v: x => x.tur, f: x => TRT[x.tur]}, {h: "Açıklama", v: x => trnTxt(x), f: x => esc(trnTxt(x)) + (x.alac ? ' <span class="bd">alacak açıldı</span>' : "")},
+      {h: "Not", f: x => tagHtml(x.ac)}, {h: "Tutar", n: 1, v: x => x.tut, f: x => tl(x.tut)}, {h: "", x: 1, f: x => btn("trnu", "trn", x.id, "Geri al", "sm")}
+    ], fl, "Kayıt yok.");
+  }
+  if (LF) { fget("led").src = LF; LF = "" } // "Hareketler" düğmesinden gelen hesap seçimi filtreye aktarılır
+  const LG = fapply("led", [...(S.led || [])].sort((x, y) => y.t - x.t), {tar: x => x.tar, tut: x => x.d, txt: x => (x.ac || "") + " " + (LT[x.tip] || ""), src: x => x.acc}).slice(0, 500);
+  return h + '<p class="mu">Kayıtlar silinmez; elle girilmiş hatalı hareketi "ters kayıt" ile geri alırsın. Ödemeler, gelirler, harcamalar ve transferler kendi ekranlarından geri alınır.</p>' +
+    fbar("led", {src: accO, srcL: "Hesap"}) + fsum(LG, x => x.d) +
+    tbl("led", [
+      {h: "Tarih", v: x => (x.tar || "") + x.t, f: x => dt(x.tar)}, {h: "Hesap", v: x => accName(x.acc), f: x => esc(accName(x.acc))}, {h: "Tür", v: x => LT[x.tip] || x.tip, f: x => LT[x.tip] || esc(x.tip)},
+      {h: "Açıklama", v: x => x.ac, f: x => esc(x.ac)}, {h: "Tutar", n: 1, v: x => x.d, f: x => col(x.d, (x.d > 0 ? "+" : "−") + tl(Math.abs(x.d)))},
+      {h: "Bakiye", n: 1, v: x => x.sonra == null ? 0 : x.sonra, f: x => x.sonra == null ? "?" : tl(x.sonra)},
+      {h: "", x: 1, f: x => S.led.some(y => y.ref === x.id && y.tip === "ters") ? '<span class="mu">geri alındı</span>' : FIXED.includes(x.tip) ? "" : btn("rev", "led", x.id, "Ters kayıt", "sm")}
+    ], LG, "Henüz hareket yok.");
+}
+function vKasaW() { return subB("hs", KSUB, HS) + (HS === "oz" ? vKasaOz() : HS === "banka" || HS === "nakit" ? vAccL(HS) : BG[HS] ? vBirG(HS) : HS === "hdf" ? vHdf() : HS === "tah" ? tahHtml() : vMov()) }
+
+/* ---------- Strateji ---------- */
+let STD = false;
+function vStrat() {
+  if (LABV) return labHtml();
+  const s = stats(), D = s.D, dv = debtVsSave(), base = sim(D, 0, 0, "avalanche"), wx = X.extra > 0 ? sim(D, X.extra, 0, "avalanche") : null;
+  // E1 (Ö1): hesap yalnızca iki oranı karşılaştırır (debtVsSave); metin karar vermez, dayanağını ve sınırlarını söyler
+  let adv;
+  if (!dv.d) adv = "Faizli borç kaydı yok; bu karşılaştırma yapılamıyor." + (dv.sv ? " Mevduatlarının en iyi net getirisi aylık " + pct(dv.sv, 2) + "." : "");
+  else adv = "En yüksek faizli borç: <b>" + esc(dv.d.ad) + "</b> — vergili aylık faiz " + pct(dv.d.r, 2) + ". " + (dv.sv ? "Mevduatlarının en iyi net getirisi: aylık " + pct(dv.sv, 2) + "." : "Mevduatlarında tanımlı faiz getirisi yok (aylık %0 sayıldı).") +
+    " Yalnızca bu iki orana bakılırsa ekstra para " + (dv.debtWins ? "<b>" + esc(dv.d.ad) + "</b> borcuna ödendiğinde daha fazla faiz tasarrufu sağlar" : "birikimde tutulduğunda daha fazla getiri sağlar") + " (fark aylık yaklaşık " + pct(Math.abs(dv.d.r - dv.sv), 2).replace("%", "") + " puan).";
+
+  let h = '<h1>Strateji</h1><div class="ac" style="margin-top:0"><button class="p" data-a="fabx" data-c="ab">🤔 Bunu alabilir miyim?</button><button data-a="labo">🧪 Karar laboratuvarı</button></div><div class="cols"><div>' + healthHtml() + runwayHtml() + reelHtml() + '</div><div>' + roadmapHtml(D, X.extra) + (S.set.icg ? '<div class="it">' + insightHtml(true) + '</div>' : "") + badgeHtml() + '</div></div>' + stressHtml() + '<div class="cols"><div class="it" style="margin-top:0"><div class="hd"><b>Borç mu, birikim mi? — faiz karşılaştırması</b></div><p style="margin:4px 0">' + adv + '</p><p class="mu" style="margin:4px 0 0">Bu karşılaştırma acil durum fonunu, nakit ihtiyacını, erken ödeme masraflarını ve oranların değişebileceğini hesaba katmaz. Faizsiz ya da düşük faizli borçların erken kapatılması her zaman en yüksek kazancı sağlamaz. Karar senin.</p></div>' +
+    '<div class="it" style="margin-top:0"><div class="hd"><b>Ekstra ödeme yaparsam</b></div>' +
+      (!base ? '<p class="bad">Mevcut ödemelerle borçlar bu hesapta kapanmıyor: aylık faiz, ödemeleri aşıyor (50 yıl sınırında).</p>' : !X.extra ? '<p class="mu" style="margin:4px 0">Her ay borçlarına ne kadar ekstra ödeyebileceğini gir; ne kadar faiz kazanacağını görelim.</p>'
+        : wx ? '<div class="ln"><span>Aylık ekstra</span><span>' + tl(X.extra) + '</span></div><div class="ln"><span>Faiz tasarrufu</span><span class="ok">' + est(base.int - wx.int) + '</span></div><div class="ln"><span>Borçlar kaç ay erken biter</span><span>' + (base.m - wx.m) + ' ay</span></div>' : "") +
+      '<div class="ac"><button class="p" data-a="exm">' + (X.extra ? "Tutarı değiştir" : "Tutar gir") + '</button></div></div></div>' +
+    '<div class="ac"><button data-a="std">' + (STD ? "Detaylı analizi gizle" : "Detaylı analiz") + '</button></div>';
+  if (!STD) return h;
+  const N = {avalanche: "En yüksek faizden başla", snowball: "En küçük borçtan başla", cash: "Aylık nakit akışını rahatlat"};
+  const rs = Object.keys(N).map(x => [x, sim(D, X.extra, 0, x)]), best = rs.filter(r => r[1]).sort((a, b) => a[1].int - b[1].int)[0];
+  const sc = [["Mevcut ödemeler", 0], ["Aylık +5.000 TL", k(5000)], ["Aylık +10.000 TL", k(10000)]].map(r => [r[0], sim(D, r[1], 0, "avalanche")]), b0 = sc[0][1];
+  h += '<div class="cols"><div><h2>Ödeme yöntemleri' + (X.extra ? " (aylık +" + tl(X.extra) + ")" : "") + '</h2><div class="tw"><table><tr><th>Yöntem</th><th>Süre</th><th>Faiz (~)</th></tr>' + rs.map(r => '<tr><td>' + N[r[0]] + '</td><td>' + (r[1] ? r[1].m + " ay" : "bitmiyor") + '</td><td>' + (r[1] ? tl(r[1].int) : "-") + '</td></tr>').join("") + '</table></div>';
+  // E2 (Ö1): ilk borç, en düşük faizi veren yöntemin kendi sırasından alınır (önceden hep 'en yüksek faizden' sırasıyla alınıyordu)
+  const first = best ? [...D].sort(ordFor(best[0]))[0] : null;
+  if (best && first) h += '<div class="w i" style="margin-top:8px">Bu hesapta en düşük toplam faiz: <b>' + N[best[0]].toLocaleLowerCase("tr") + '</b> (~' + tl(best[1].int) + '). Bu yöntemde ekstra ödemenin ilk gittiği borç: <b>' + esc(first.ad) + '</b>' + (first.onc ? " (öncelikli işaretli)" : "") + '. Diğer yöntemlerin süre ve faizleri tabloda; seçim senin.</div>';
+  h += '<h2>Senaryolar</h2><div class="tw"><table><tr><th>Senaryo</th><th>Süre</th><th>Faiz tasarrufu</th></tr>' + sc.map(r => '<tr><td>' + r[0] + '</td><td>' + (r[1] ? r[1].m + " ay" : "-") + '</td><td>' + (r[1] && b0 ? tl(b0.int - r[1].int) : "-") + '</td></tr>').join("") + '</table></div>';
+  const dr = Math.round(s.inc * .2);
+  h += '<p>Gelir %20 düşerse (−' + tl(dr) + '): ' + GOST.kalan.ad.toLocaleLowerCase("tr") + ' <b>' + col(s.rem - dr) + '</b> olur.</p></div><div>';
+  const r = C.on ? cons(C.rate, C.term, C.lump, s.tot) : null, b = C.on ? sim(D, 0, C.lump, "avalanche") : null;
+  h += '<h2>Konsolidasyon</h2><p class="mu">Tüm borçları tek kredide birleştirme senaryosu.</p><div class="ac"><button data-a="conm">Senaryo hesapla</button></div>';
+  if (r) h += '<div class="st" style="margin-top:8px;border-color:var(--ac)"><small>' + esc(C.name || "Senaryo") + ' · %' + C.rate + ' aylık · ' + C.term + ' ay</small><b>' + tl(r.bal) + '</b>' +
+    '<div class="ln"><span>Aylık taksit</span><span>' + est(r.taksit) + '</span></div><div class="ln"><span>Toplam faiz</span><span>' + est(r.int) + '</span></div>' +
+    '<div class="ln"><span>Mevcut düzenle toplam faiz</span><span>' + (b ? est(b.int) : "-") + '</span></div><div class="ln"><span>Fark (+ tasarruf)</span><span>' + (b ? est(b.int - r.int) : "-") + '</span></div>' +
+    '<div class="ln"><span>Mevcut aylık yük</span><span>' + tl(s.load) + '</span></div><div class="ac"><button class="sm" data-a="csave">Senaryoyu kaydet</button></div></div>';
+  h += live(S.scen).map(c => { const x = cons(c.rate, c.term, c.lump, s.tot); return R("scen", c, esc(c.name), [["Faiz / vade", "%" + c.rate + " / " + c.term + " ay"], ["Peşin", tl(c.lump)], ["Taksit / toplam faiz", x ? est(x.taksit) + " / " + est(x.int) : "-"]], {edit: false, fold: true}) }).join("");
+  return h + '</div></div><p class="mu">Kart asgarisi her ay kalan borca göre yeniden hesaplanır; aylık ödeme toplamı sabit tutulur. Öncelikli elden borçlar her yöntemde önce ödenir. Tüm değerler tahmindir.</p>';
+}
+
+/* ---------- Ayarlar ---------- */
+const AKT = {ekle: "Ekleme", duzenle: "Düzenleme", sil: "Silme", odeme: "Ödeme", tahsilat: "Tahsilat", geri: "Geri alma", transfer: "Transfer", ekstre: "Ekstre", gelir: "Gelir onayı", gider: "Gider onayı", fiyat: "Fiyat girişi", ayar: "Ayar", yedek: "Yedek / aktarım", sistem: "Sistem"};
+const KEYS = [["H", "Harcama ekle"], ["G", "Gelir ekle"], ["T", "Transfer"], ["P", "Tutarları gizle / göster"], ["1 – 6", "Menü: Özet, Gelirler, Giderler, Kasa, Strateji, Ayarlar"], ["Esc", "Açık pencereyi kapat"], ["?", "Bu listeyi göster"]];
+let SETV = "", AF = "";
+const SETI = [["yedek", "💾 Yedek al", "Şifreli yedek dosyası"], ["klasor", "📁 Klasöre / buluta yedek", "OneDrive, Google Drive, iCloud, harici bellek"], ["yukle", "📂 Yedek yükle", "Dosyadan yükle ve birleştir"], ["disa", "📤 Dışa aktar", "Excel, PDF veya şifresiz dosya"],
+  ["gor", "🎨 Görünüm ve kullanım", "Tema, açılış ekranı, tutar gizleme, varsayılan hesap, ay başlangıcı"], ["guv", "🔒 Güvenlik", "PIN değiştir, otomatik kilit"], ["onay", "🔔 Onay pencereleri", "Ekstre, gelir ve gider onayları"],
+  ["oran", "📊 Oran tablosu", "KKDF, BSMV, stopaj, asgari ödeme, faiz kademeleri"], ["kat", "🏷️ Kategoriler", "Harcama kategorileri"], ["cal", "💼 Çalışma bilgisi", "Çalışma türü ve sektör"],
+  ["log", "📜 İşlem kaydı", "Son 12 ayın tüm veri girişleri"], ["keys", "⌨️ Klavye kısayolları", "Hızlı ekleme ve menü tuşları"], ["veri", "🗂️ Veri işlemleri", "Örnek veri, boşaltma, tümünü silme"], ["den", "🩺 Veri denetimi", "Bakiye, transfer, tekrar kayıt ve tutarsızlık kontrolü"], ["test", "✅ Hesap testleri", "Hesaplama motorunun kontrolleri"]];
+const SEV = {r: ["Hata", "r"], w: ["Uyarı", ""], i: ["İnceleme", "i"]};
+function vDen() {
+  const F = audit(), n = s => F.filter(f => f.sev === s).length;
+  return '<h1>Veri denetimi</h1><p class="mu">Verin değiştirilmeden kontrol edilir. Otomatik düzeltme yalnızca sen "Düzelt" dersen ve önce yedek alınarak yapılır. İnceleme bulguları hata olmayabilir.</p>' +
+    '<div class="g tiles"><div class="st"><small>Hata</small><b class="' + (n("r") ? "bad" : "ok") + '">' + n("r") + '</b></div><div class="st"><small>Uyarı</small><b>' + n("w") + '</b></div><div class="st"><small>İnceleme</small><b>' + n("i") + '</b></div></div>' +
+    (F.length ? F.map((f, j) => '<div class="w ' + SEV[f.sev][1] + '" style="margin:8px 0"><b>' + SEV[f.sev][0] + ': ' + esc(f.ad) + '</b><br>' + esc(f.ac) +
+      (f.kay.length ? '<br><small>Etkilenen: ' + f.kay.slice(0, 6).map(esc).join(" · ") + (f.kay.length > 6 ? " …" : "") + '</small>' : "") +
+      '<br><small><b>Muhtemel neden:</b> ' + esc(f.neden) + '</small><br><small><b>Öneri:</b> ' + esc(f.oneri) + '</small>' +
+      (f.fix ? '<br><small><b>Önce:</b> ' + esc(f.fix.once) + ' → <b>Sonra:</b> ' + esc(f.fix.sonra) + '</small><div class="ac"><button class="sm p" data-a="denfix" data-k="' + j + '">Düzelt (önce yedek alınır)</button></div>' : "") + '</div>').join("")
+      : '<p class="ok">✅ Tutarsızlık bulunmadı.</p>');
+}
+function vSet() {
+  const back = '<button data-a="setb">← Ayarlar</button>';
+  if (SETV === "test") { const t = tests(), f = t.filter(x => !x[1]).length; return back + '<h1>Hesap testleri</h1><p class="' + (f ? "bad" : "ok") + '">' + (t.length - f) + ' / ' + t.length + ' test geçti</p>' + t.map(x => '<div class="ln"><span>' + x[0] + '</span><span class="' + (x[1] ? "ok" : "bad") + '">' + (x[1] ? "geçti" : "kaldı") + '</span></div>').join("") }
+  if (SETV === "den") return back + vDen();
+  if (SETV === "log") {
+    const ks = [...new Set(live(S.akt).map(a => a.kon))], l = fapply("akt", live(S.akt).filter(a => !AF || a.kon === AF).sort((a, b) => b.t - a.t), {tar: a => fmtD(new Date(a.t)), tut: () => 0, txt: a => (AKT[a.tip] || "") + " " + (CL[a.kon] || "") + " " + a.ac});
+    return back + '<h1>İşlem kaydı</h1><p class="mu">Son 12 ayın tüm veri girişleri. Daha eskiler otomatik silinir; saklamak için Excel\'e aktar (İşlem kaydı sayfası).</p>' +
+      '<label>Konu</label><select id="af"><option value="">Tümü (' + live(S.akt).length + ')</option>' + ks.map(x => '<option value="' + esc(x) + '"' + (AF === x ? " selected" : "") + '>' + esc(CL[x] || x) + '</option>').join("") + '</select>' + fbar("akt") + '<p class="mu" style="margin:4px 0">' + l.length + ' kayıt</p>' +
+      tbl("akt", [{h: "Zaman", v: a => a.t, f: a => new Date(a.t).toLocaleString("tr-TR", {dateStyle: "short", timeStyle: "short"})}, {h: "İşlem", v: a => AKT[a.tip] || a.tip, f: a => AKT[a.tip] || esc(a.tip)},
+        {h: "Konu", v: a => CL[a.kon] || a.kon, f: a => esc(CL[a.kon] || a.kon)}, {h: "Açıklama", v: a => a.ac, f: a => esc(a.ac)}], l.slice(0, 500), "Kayıt yok.") +
+      (l.length > 500 ? '<p class="mu">İlk 500 kayıt gösteriliyor.</p>' : "");
+  }
+  const u = usage();
+  return '<h1>Ayarlar</h1><div class="g setg">' + SETI.map(x => '<button class="tile" data-a="set" data-c="' + x[0] + '"><b>' + x[1] + '</b><small>' + x[2] + (x[0] === "veri" ? " · depolama ~%" + u.pct : "") + '</small></button>').join("") + '</div>';
+}
+const SETM = {
+  klasor: () => modal(vKlasor()),
+  gor: () => modal('<h2 style="margin-top:0">Görünüm ve kullanım</h2><div class="fl">' +
+    '<div class="fld"><label>Tema</label><select id="sg_t">' + selO([["auto", "Cihaza göre"], ["light", "Açık"], ["dark", "Koyu"]], S.set.tema) + '</select></div>' +
+    '<div class="fld"><label>Açılış ekranı</label><select id="sg_a">' + selO(VIEWK.map(v => [v, document.querySelector('nav [data-t="' + v + '"] .nl').textContent.trim()]), S.set.acilis) + '</select></div>' +
+    '<div class="fld"><label>Varsayılan hesap (formlarda seçili gelir)</label><select id="sg_h">' + accOpts(S.set.vh, "Seçilmedi", false) + '</select></div>' +
+    '<div class="fld"><label>Ay başlangıcı (bütçe dönemi)</label><select id="sg_b">' + selO([[1, "Takvim ayı (1'i – ay sonu)"]].concat(Array.from({length: 27}, (_, i) => [i + 2, "Her ayın " + (i + 2) + "'i – ertesi ayın " + (i + 1) + "'i"])), S.set.ayBas) + '</select></div>' +
+    '<div class="fld full"><label class="cb"><input type="checkbox" id="sg_g"' + (S.set.gizle ? " checked" : "") + '> Tutarları gizle (•••); 👁 düğmesiyle de açılıp kapanır</label></div>' +
+    '<div class="fld full"><label class="cb"><input type="checkbox" id="sg_i"' + (S.set.icg ? " checked" : "") + '> Özet\'te harcama içgörülerini göster</label><label class="cb"><input type="checkbox" id="sg_r"' + (S.set.rozet ? " checked" : "") + '> Strateji\'de rozetleri göster</label>' +
+    '<label class="cb"><input type="checkbox" id="sg_k"' + (S.set.kur ? " checked" : "") + '> Döviz kurlarını internetten al (Avrupa Merkez Bankası, Frankfurter). Yalnızca kur sorgusu gönderilir; kişisel veri gitmez.</label></div></div>' + okNo("gorok")),
+  guv: () => modal('<h2 style="margin-top:0">Güvenlik</h2><label>Otomatik kilit</label><select id="sv_k">' + selO([[1, "1 dakika"], [5, "5 dakika"], [15, "15 dakika"], [0, "Kapalı"]], S.set.kilit) + '</select>' +
+    '<h3>PIN değiştir</h3><div class="fl"><div class="fld"><label>Yeni PIN (6 hane)</label><input type="password" id="np1" inputmode="numeric" maxlength="6" autocomplete="new-password"></div><div class="fld"><label>Yeni PIN tekrar</label><input type="password" id="np2" inputmode="numeric" maxlength="6" autocomplete="new-password"></div></div>' +
+    '<p class="mu">PIN alanlarını boş bırakırsan PIN değişmez. Yedek dosyaları PIN\'den bağımsız şifreyle korunur.</p><div id="sve"></div>' + okNo("guvok")),
+  onay: () => modal('<h2 style="margin-top:0">Onay pencereleri</h2><p class="mu">Kapalı olan onaylar sormadan işlenir (gelir beklenen tutarla hesaba eklenir, sabit gider ödeme yöntemine göre işlenir). Ekstre onayı kapalıysa yalnızca uyarı gösterilir.</p>' +
+    [["so_e", "ek", "Kart ekstresi (kesim günü)"], ["so_g", "gel", "Düzenli gelir (gelir günü)"], ["so_d", "gid", "Sabit gider (ödeme günü)"]].map(x => '<label class="cb"><input type="checkbox" id="' + x[0] + '"' + (S.set.onay[x[1]] ? " checked" : "") + '> ' + x[2] + '</label>').join("") + okNo("onayok")),
+  oran: () => {
+    const p = S.p, inp = (id, v) => '<input id="' + id + '" inputmode="decimal" value="' + esc(v) + '">';
+    const rd = rateDiff(p);
+    modal('<h2 style="margin-top:0">Oran tablosu</h2><p class="mu">Bu oranlar mevzuata ve bankana bağlıdır; uygulama bunları internetten almaz. Varsayılanlar ' + dt(PDEF().dog) + ' tarihinde aşağıdaki kaynaklarla karşılaştırıldı; resmî metinler doğrudan okunamadığı için kesin mevzuat bilgisi değildir. Kendi sözleşmenden ve resmî kaynaktan teyit edip değiştirebilirsin.</p>' +
+      '<details><summary>Kaynaklar (' + PSRC.length + ')</summary>' + PSRC.map(x => '<div class="ln"><span>' + esc(x[0]) + '<br><small class="mu">' + esc(x[1]) + '</small></span><span><span class="bd">' + esc(x[2]) + '</span></span></div>').join("") + '</details>' +
+      (rd.length ? '<div class="w i">Senin tablon ' + rd.length + ' değerde varsayılandan farklı: ' + rd.map(x => esc(x[0]) + " " + x[1] + " (varsayılan " + x[2] + ")").join(" · ") + '. Bilerek girdiysen sorun yok.</div>' : "") +
+      '<div class="g"><div><label>KKDF (%)</label>' + inp("pk", p.kkdf) + '</div><div><label>BSMV (%)</label>' + inp("pb", p.bsmv) + '</div></div>' +
+      '<div class="g"><div><label>Mevduat stopajı (%)</label>' + inp("pst", p.stopaj) + '</div><div><label>Son doğrulama</label><input type="date" id="pdg" value="' + esc(p.dog) + '"></div></div>' +
+      '<h3>Asgari ödeme</h3><div class="g3"><div><label>Limit eşiği (TL)</label>' + inp("pae", p.asg.esik / 100) + '</div><div><label>Eşik ve altı %</label>' + inp("paa", p.asg.alt) + '</div><div><label>Eşik üstü %</label>' + inp("pau", p.asg.ust) + '</div></div>' +
+      '<h3>Kart faiz kademeleri (aylık, dönem borcuna göre)</h3>' + p.kk.map((r, i) => '<div class="g3"><div><label>' + (i < 2 ? "Üst sınır (TL)" : "Üstü") + '</label>' + (i < 2 ? inp("pkm" + i, r.max / 100) : '<input disabled value="' + tlR(p.kk[1].max) + ' +">') + '</div><div><label>Akdi %</label>' + inp("pka" + i, r.akdi) + '</div><div><label>Gecikme %</label>' + inp("pkg" + i, r.gec) + '</div></div>').join("") +
+      '<h3>Nakit avans ve KMH (aylık)</h3><div class="g"><div><label>Akdi %</label>' + inp("pva", p.avans.akdi) + '</div><div><label>Gecikme %</label>' + inp("pvg", p.avans.gec) + '</div></div>' +
+      '<div class="ac"><button class="p" data-a="prm">Kaydet</button><button data-a="prmd">Varsayılanlara dön</button><button data-a="no">Vazgeç</button></div>');
+  },
+  kat: () => modal('<h2 style="margin-top:0">Harcama kategorileri</h2><p class="mu">Hazır liste: ' + KAT0.join(", ") + '</p>' +
+    ((S.kat || []).map((x, i) => '<div class="ln"><span>' + esc(x) + '</span><span><button class="sm" data-a="katdel" data-k="' + i + '">Sil</button></span></div>').join("") || '<p class="mu">Henüz eklediğin kategori yok.</p>') +
+    '<label>Yeni kategori</label><input id="kn" maxlength="40"><div class="ac"><button class="p" data-a="katadd">Ekle</button><button data-a="no">Kapat</button></div>'),
+  cal: () => modal('<h2 style="margin-top:0">Çalışma bilgisi</h2><label>Çalışma türü</label><select id="pt"><option value="">Seçilmedi</option>' + selO(WT, (S.prof || {}).tur) + '</select>' +
+    '<label>Sektör</label><select id="ps"><option value="">Seçilmedi</option>' + selO(SK.map(x => [x, x]), (S.prof || {}).sek) + '</select>' + okNo("prof")),
+  keys: () => modal('<h2 style="margin-top:0">Klavye kısayolları</h2>' + KEYS.map(x => '<div class="ln"><span><b>' + x[0] + '</b></span><span>' + x[1] + '</span></div>').join("") + '<p class="mu">Kısayollar bir yazı alanı ya da pencere açıkken çalışmaz.</p><div class="ac"><button data-a="no">Kapat</button></div>'),
+  veri: () => modal('<h2 style="margin-top:0">Veri işlemleri</h2>' +
+    '<h3>Depolama (tahmini)</h3>' + (() => { const u = usage(); return '<div class="bar"><i style="width:' + Math.min(100, u.pct) + '%;background:var(--' + (u.pct >= 80 ? "bad" : "ok") + ')"></i></div><p class="mu">Yaklaşık ' + (u.b / 1048576).toFixed(2) + ' MB / 5 MB (%' + u.pct + '). Tarayıcı kesin sınırı bildirmediği için tahmindir; %80\'de uyarı verilir.</p>' })() +
+    '<h3>Önceki sürüme dön</h3>' + (listBk(P.id).map(x => '<div class="ln"><span>v' + x.v + ' verisi · ' + new Date(x.t).toLocaleString("tr-TR", {dateStyle: "short", timeStyle: "short"}) + '</span><span><button class="sm" data-a="bkres" data-k="' + esc(x.key) + '">Geri yükle</button></span></div>').join("") ||
+      '<p class="mu">Henüz sürüm yedeği yok. Uygulama yeni bir sürümle ilk açıldığında eski veri otomatik saklanır (en fazla son 2).</p>') +
+    '<h3>Örnek veri / boşaltma</h3><div class="ac"><button data-a="reset">Örnek verilere dön</button><button data-a="empty">Verileri boşalt</button></div>' +
+    '<h3>Tüm verileri sil</h3><p class="mu">Bu cihazdaki tüm veriler ve PIN silinir; geri alınamaz. Onaylamak için SİL yaz.</p><input id="dl" autocomplete="off"><div class="ac"><button data-a="delp" style="color:var(--bad);border-color:var(--bad)">Tümünü sil</button><button data-a="no">Kapat</button></div>'),
+  disa: () => modal('<h2 style="margin-top:0">Dışa aktar</h2><p class="mu">Şifresiz dosyalarda tüm finansal bilgilerin açık olarak bulunur; kime gönderdiğine ve nerede sakladığına dikkat et.</p>' +
+    '<div style="display:grid;gap:8px"><button class="tile" data-a="xx"><b>📗 Excel (.xlsx)</b><small>Her konu ayrı sayfada; Excel, Google E-Tablolar, Numbers ile açılır</small></button>' +
+    '<button class="tile" data-a="xp" data-c="0"><b>📄 PDF — özet rapor</b><small>Net varlık, kasa, borçlar, birikimler; yazdır penceresinde "PDF olarak kaydet"i seç</small></button>' +
+    '<button class="tile" data-a="xp" data-c="1"><b>📄 PDF — detaylı rapor</b><small>Tüm kayıtlar (harcamalar, ödemeler, transferler, hareketler)</small></button>' +
+    '<button class="tile" data-a="xj"><b>🗒️ Şifresiz yedek (.json)</b><small>Başka cihaza aktarmak için; "Yedek yükle" ile şifre sormadan açılır</small></button>' +
+    '<button class="tile" data-a="set" data-c="yedek"><b>🔐 Şifreli yedek</b><small>Önerilen; yedek şifresiyle korunur</small></button></div><div class="ac"><button data-a="no">Kapat</button></div>')
+};
+function readP() {
+  const v = id => $("#" + id).value;
+  return cleanP({kkdf: num(v("pk")), bsmv: num(v("pb")), stopaj: num(v("pst")), dog: v("pdg"),
+    asg: {esik: k(num(v("pae"))), alt: num(v("paa")), ust: num(v("pau"))},
+    kk: [0, 1, 2].map(i => ({max: i < 2 ? k(num(v("pkm" + i))) : 0, akdi: num(v("pka" + i)), gec: num(v("pkg" + i))})),
+    avans: {akdi: num(v("pva")), gec: num(v("pvg"))}});
+}
 /* ---------- Ortak: formlar, onay ve ödeme pencereleri (PC ve telefon aynı kodu kullanır) ---------- */
 function applyTheme() {
   const t = S && S.set ? S.set.tema : (() => { try { return localStorage.getItem("fp-tema") || "light" } catch (e) { return "light" } })();
@@ -2572,7 +3077,7 @@ const F = {
   plan: [["ad", "Açıklama (ör. araç sigortası, ikramiye)"], ["tip", "Yön", "s"], ["tut", "Tutar (TL)", "m"], ["tar", "Tarih", "d"]],
   hdf: [["ad", "Hedef adı"], ["hedef", "Hedef tutar (TL)", "m"], ["tarih", "Hedef tarih", "d0"], ["onc", "Öncelik sırası (1 = en önce)", "n"], ["bagli", "Bağlı birikimler", "ms"]]
 };
-const modal = h => { $("#mf").innerHTML = h; $("#m").style.display = "block" };
+const modal = h => { $("#mf").innerHTML = h; $("#m").style.display = "block"; $("#m").scrollTop = 0; if (typeof cardTables === "function") cardTables($("#mf")) };
 const closeM2 = () => { $("#m2").style.display = "none"; NW = null };
 const closeM = () => { $("#m").style.display = "none"; closeM2() };
 const okNo = (a, t = "Kaydet") => '<div class="ac"><button class="p" data-a="' + a + '">' + t + '</button><button data-a="no">Vazgeç</button></div>';
@@ -3485,6 +3990,12 @@ function vLogin() {
   }
   // Önceki sürümde şifreyle oluşturulmuş profil
   if (!p.pin) return '<h1>Giriş</h1>' + er + '<label>Önceki sürümde belirlediğin şifre</label><input id="pw" type="password" autocomplete="current-password"><div class="ac"><button class="p" data-a="unlock">Aç</button></div><p class="mu">Girdikten sonra Ayarlar → Güvenlik bölümünden 6 haneli PIN’e geç.</p>';
+  // Açılışta önce karşılama ekranı; PIN tuş takımı "Giriş yap"a basınca gelir (hata/kilit durumunda doğrudan PIN ekranı)
+  if (!L.gir && !L.err && !BUSY) {
+    const h = new Date().getHours(), sel = h < 5 ? "İyi geceler" : h < 12 ? "Günaydın" : h < 18 ? "İyi günler" : "İyi akşamlar";
+    return '<div class="wz"><div style="font-size:56px;margin-top:6vh">🧮</div><h1>' + sel + ', hoş geldin</h1><p class="mu">Finans ve Borç Robotu: gelirin, giderin, borçların ve kasan tek yerde.</p>' +
+      '<p class="mu">Verilerin yalnızca bu cihazda, PIN ile şifreli duruyor.</p><div class="ac wac"><button class="p" data-a="gir" style="min-width:160px">Giriş yap</button></div></div>';
+  }
   const lk = Math.ceil((p.until - Date.now()) / 1000);
   const rb = L.bozuk && listBk(p.id).length ? '<div class="ac" style="justify-content:center"><button data-a="bkres0">Önceki sürümün yedeğini geri yükle</button></div>' : "";
   return '<div class="wz"><div style="font-size:40px;margin-top:6vh">🔒</div><h1>PIN giriniz</h1>' + (lk > 0 && !L.err ? '<div class="w r" style="text-align:left">Çok fazla yanlış deneme. ' + lk + ' sn sonra tekrar dene.</div>' : er) + rb + dots() + (BUSY ? '<p class="mu">Açılıyor…</p>' : "") + pad() + '</div>';
@@ -3492,9 +4003,10 @@ function vLogin() {
 /* Kilitliyken de çalışan tıklamalar (PC ve telefon arayüzü ortak); işlendiyse true döner */
 function loginClick(a, b) {
   if (a === "key") { padKey(b.dataset.k); return true }
+  if (a === "gir") { L.gir = true; render(); return true }
   if (a === "wz") { wzGo(b.dataset.k); return true }
   if (a === "unlock") { unlockP().then(render); return true }
-  if (a === "lock") { lockP(); return true }
+  if (a === "lock") { if (typeof kyDirty === "function" && kyDirty() && !confirm("Son klasör yedeğinden sonra değişiklik var. Yedeklemeden kilitlensin mi? (Vazgeç'e basıp üstteki \"Klasöre yedekle\" düğmesini kullanabilirsin.)")) return true; lockP(); return true }
   if (a === "bpok") { pwDone(true); return true }
   if (a === "bpno") { pwDone(false); return true }
   if (a === "bkres0" && !S && PI[0]) { // okunamayan veri: en son taşıma yedeğine dön (şifreli metin olduğu gibi geri konur)
@@ -3510,10 +4022,11 @@ function loginClick(a, b) {
 document.addEventListener("keydown", e => {
   if (S || L.splash) return;
   const inInput = e.target && /INPUT|SELECT|TEXTAREA/.test(e.target.tagName), hasPad = document.querySelector(".pad");
-  if (hasPad && !inInput && /^\d$/.test(e.key)) { e.preventDefault(); padKey(e.key) }
+  if (!hasPad && !inInput && /^\d$/.test(e.key) && document.querySelector('[data-a="gir"]')) { e.preventDefault(); L.gir = true; padKey(e.key) } // karşılama ekranında rakam yazmak doğrudan PIN'e geçer
+  else if (hasPad && !inInput && /^\d$/.test(e.key)) { e.preventDefault(); padKey(e.key) }
   else if (hasPad && !inInput && e.key === "Backspace") { e.preventDefault(); padKey("del") }
   else if (e.key === "Enter") {
-    const b = document.querySelector('[data-a="unlock"],[data-a="wz"][data-k="next"],[data-a="wz"][data-k="finish"]');
+    const b = document.querySelector('[data-a="gir"],[data-a="unlock"],[data-a="wz"][data-k="next"],[data-a="wz"][data-k="finish"]');
     if (b) { e.preventDefault(); b.click() }
   }
 });
@@ -3657,6 +4170,78 @@ document.addEventListener("change", e => {
   }
 });
 
+/* ---------- Klasöre yedek (v17): seçilen klasöre (OneDrive, Google Drive, iCloud Drive, harici bellek) şifreli yedek yazar ----------
+   Uygulama buluta bağlanmaz: dosyayı buluta yükleyen, o klasörü eşitleyen programdır (OneDrive, Google Drive masaüstü, iCloud for Windows).
+   Tarayıcının klasör erişimi (File System Access API) yalnızca masaüstü Chrome / Edge'de vardır; klasör tanıtıcısı IndexedDB'de profil başına durur.
+   Kararlar (PLAN Y1): şifre her yedekte sorulur ve hiçbir yerde tutulmaz; günde bir dosya (aynı gün üzerine yazılır); eski dosyalar silinmez. */
+const KY_OK = () => typeof window.showDirectoryPicker === "function";
+const kyDB = () => new Promise((res, rej) => { const r = indexedDB.open("fp-ky", 1); r.onupgradeneeded = () => r.result.createObjectStore("h"); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error) });
+async function kyGet(id) { const db = await kyDB(); return new Promise((res, rej) => { const q = db.transaction("h").objectStore("h").get(id); q.onsuccess = () => res(q.result || null); q.onerror = () => rej(q.error) }) }
+async function kyPut(id, h) {
+  const db = await kyDB();
+  return new Promise((res, rej) => { const t = db.transaction("h", "readwrite"), o = t.objectStore("h"); if (h) o.put(h, id); else o.delete(id); t.oncomplete = () => res(); t.onerror = () => rej(t.error) });
+}
+let KYH = null; // bu oturumda kullanılan klasör tanıtıcısı
+const kyFile = () => "Finans-Yedek-" + tod() + ".json";
+const kyDirty = () => !!(S && S.set.ky && KY_OK() && S.t > (S.set.kyT || 0)); // son klasör yedeğinden sonra veri değişti mi
+const kyBanner = () => kyDirty() && !RO ? '<div class="w i" style="margin-bottom:10px">Son klasör yedeğinden sonra değişiklik var (' + esc(S.set.ky) + '). <button class="sm p" data-a="kyrun">📁 Klasöre yedekle</button></div>' : "";
+async function kyPerm(h) { // izin, tıklama anında istenir (tarayıcı kuralı)
+  const o = {mode: "readwrite"};
+  if (await h.queryPermission(o) === "granted") return true;
+  return await h.requestPermission(o) === "granted";
+}
+async function kyPick() {
+  let h;
+  try { h = await showDirectoryPicker({id: "finans-yedek", mode: "readwrite"}) } catch (e) { if (e && e.name !== "AbortError") alert("Klasör seçilemedi: " + errTxt(e)); return false }
+  KYH = h;
+  try { await kyPut(P.id, h) } catch (e) { alert("Klasör bu oturumda kullanılacak ama hatırlanamadı (" + errTxt(e) + "); sonraki açılışta yeniden seçmen gerekebilir.") }
+  S.set.ky = String(h.name || "klasör").slice(0, 80); S.set.kyT = 0;
+  logA("ayar", "veri", "Yedek klasörü seçildi: " + S.set.ky); save();
+  return true;
+}
+/* Tıklamayla çalışır: önce klasör izni, sonra yedek şifresi, sonra yazma ve geri okuyarak doğrulama. Hata olursa hiçbir kayıt "yedeklendi" sayılmaz. */
+async function kyRun() {
+  if (RO) return alert("Bu sekme salt okunur; yedek, verinin açık olduğu sekmeden alınır.");
+  if (!KY_OK()) return SETM.klasor();
+  let h = KYH;
+  if (!h) { try { h = KYH = await kyGet(P.id) } catch (e) { h = null } }
+  if (!h) { alert("Yedek klasörü bulunamadı; Ayarlar → Klasöre / buluta yedek bölümünden yeniden seç."); return SETM.klasor() }
+  try { if (!await kyPerm(h)) return alert("Klasöre yazma izni verilmedi. Hiçbir şey yazılmadı.") }
+  catch (e) { return alert("Klasöre erişilemedi (" + errTxt(e) + "). Harici bellek çıkarılmış olabilir; takıp yeniden dene ya da klasörü değiştir.") }
+  const b = await blob(false);
+  if (!b) return; // şifre girilmedi
+  const ad = kyFile();
+  try {
+    const f = await h.getFileHandle(ad, {create: true}), w = await f.createWritable(); // tarayıcı geçici dosyaya yazar, close() ile yerine koyar
+    await w.write(b);
+    await w.close();
+    const geri = await (await f.getFile()).text();
+    if (geri !== await b.text()) throw new Error("yazılan dosya doğrulanamadı");
+  } catch (e) {
+    alert("Yedek klasöre yazılamadı (" + errTxt(e) + "). Klasör silinmiş, harici bellek çıkarılmış ya da disk dolu olabilir. Ayarlar → Yedek al ile dosyayı elle kaydedebilirsin.");
+    return;
+  }
+  logA("yedek", "veri", "Klasöre şifreli yedek: " + S.set.ky + " / " + ad);
+  S.t = Date.now(); S.set.sonYedek = S.t; S.set.kyT = S.t;
+  save(true); // kyT ile aynı zaman damgası kalsın: bu kayıt "yeni değişiklik" sayılmaz
+  render();
+  alert("Yedek yazıldı: " + S.set.ky + " / " + ad + ". Klasör bir bulut klasörüyse dosyayı o programın yüklediğini kontrol et.");
+}
+async function kyForget() {
+  try { await kyPut(P.id, null) } catch (e) {}
+  KYH = null; S.set.ky = ""; S.set.kyT = 0;
+  logA("ayar", "veri", "Yedek klasörü bırakıldı (klasördeki dosyalar silinmedi)"); save();
+}
+function vKlasor() {
+  if (!KY_OK()) return '<h2 style="margin-top:0">Klasöre / buluta yedek</h2><div class="w i">Bu tarayıcı bir klasöre doğrudan yazmayı desteklemiyor. Bu özellik yalnızca bilgisayarda Chrome ve Edge\'de çalışır.</div>' +
+    '<p>Telefonda ya da bu tarayıcıda: <b>Yedek al</b> ile dosyayı indir, sonra Dosyalar / Drive uygulamasıyla iCloud Drive, Google Drive veya OneDrive\'a taşı.</p><div class="ac"><button class="p" data-a="set" data-c="yedek">💾 Yedek al</button><button data-a="no">Kapat</button></div>';
+  const var_ = !!S.set.ky, son = S.set.kyT ? new Date(S.set.kyT).toLocaleString("tr-TR", {dateStyle: "short", timeStyle: "short"}) : "henüz yok";
+  return '<h2 style="margin-top:0">Klasöre / buluta yedek</h2>' +
+    '<p class="mu">Bilgisayarındaki bir klasörü seç; şifreli yedek oraya yazılır. Klasör <b>OneDrive</b>, <b>Google Drive</b> (masaüstü uygulamasının "Drive\'ım" klasörü), <b>iCloud Drive</b> ya da bir <b>harici bellek</b> olabilir. Bulut klasöründeki dosyayı buluta o program yükler; bu uygulama internete bağlanmaz.</p>' +
+    '<div class="ln"><span>Klasör</span><span>' + (var_ ? esc(S.set.ky) : "seçilmedi") + '</span></div><div class="ln"><span>Son klasör yedeği</span><span>' + son + '</span></div>' +
+    '<p class="mu">Her yedekte yedek şifresi sorulur ve saklanmaz. Günde bir dosya oluşur (<code>' + kyFile() + '</code>); aynı gün içindeki yedek o dosyanın üzerine yazılır. Eski dosyalar hiç silinmez; istediğinde kendin silebilirsin. Değişiklik olunca ekranın üstünde "Klasöre yedekle" düğmesi çıkar.</p>' +
+    '<div class="ac"><button class="p" data-a="kysec">' + (var_ ? "Klasörü değiştir" : "📁 Klasör seç") + '</button>' + (var_ ? '<button data-a="kyrun">Şimdi yedekle</button><button data-a="kyunut">Klasörü bırak</button>' : "") + '<button data-a="no">Kapat</button></div>';
+}
 /* ---------- Ortak işlem yönlendirici: veri değiştiren ve pencere açan tıklamalar (PC ve telefon aynı) ----------
    Arayüzün kendi tıklama dinleyicisi önce gezinmeyi işler, sonra actCommon() çağırır; işlendiyse true döner. */
 const RO_OK = ["tab", "navTo", "gs", "gl", "hs", "hf", "hfa", "sort", "sortx", "menu", "lock", "std", "setb", "bqx", "bqm", "bqok", "no", "nwno", "rotake", "xx", "xp", "birm", "gz", "th", "tag", "calnav", "cald", "fltx", "fab", "foto", "yedekal", "mt", "myedek", "mden", "cbok", "enfm", "tahn", "tahk", "mtah", "labo", "labx", "labsel", "stry", "mstr"];
@@ -3897,123 +4482,96 @@ function showErr(msg) {
 addEventListener("error", e => showErr(e.message));
 addEventListener("unhandledrejection", e => showErr(e.reason && e.reason.message || e.reason));
 
-/* ---------- Telefon arayüzü (T1): hızlı giriş, onaylar, ödemeler, kısa özet ----------
-   Hesaplar, formlar, onay ve ödeme pencereleri PC ile aynı ortak koddan gelir; burada yalnızca telefon ekranları ve gezinme var. */
-let MT = "oz"; // telefon sekmesi: oz · ekle · onay · borc · ayar
-// Ortak formların yazdığı PC gezinme değişkenleri (telefonda kullanılmaz ama tanımlı olmalı)
-let GS = "", GL = "", HS = "", HF = "", LF = "", BQ = "", SETV = "", AF = "", STD = false;
-const mHead = t => '<div class="mtop"><h1>' + t + '</h1><button data-a="gz" aria-label="Tutarları gizle veya göster">' + (S.set.gizle ? "🙈" : "👁") + '</button><button data-a="th" aria-label="Temayı değiştir" title="Tema: ' + THL[S.set.tema] + '">' + THI[S.set.tema] + '</button><button data-a="lock" aria-label="Kilitle">🔒</button></div>';
-const row = (l, sub, r, x = "") => '<div class="row"><span>' + l + (sub ? '<small>' + sub + '</small>' : "") + '</span><span style="text-align:right"><b>' + r + '</b>' + x + '</span></div>';
-/* Bekleyen onaylar: kart ekstresi, düzenli gelir, sabit gider */
-function mPend() {
-  const l = [];
-  act(S.cards).forEach(o => { if (needEk(o)) l.push(["ek", "", o.id, "💳 " + esc(o.bank) + " kartı ekstresi", "kesim " + dtn(lastKesim(o)) + " · ekstre tutarını gir", "Gir"]) });
-  live(S.income).forEach(o => gelPend(o, S, true).forEach(s => l.push(["gel", "", o.id, "💰 " + esc(o.ad), dt(s) + " · beklenen " + tl(gelExp(o, s)), "Onayla"])));
-  live(S.expense).forEach(o => gidPend(o, S, true).forEach(s => l.push(["gid", "", o.id, "🧾 " + esc(o.ad), dt(s) + " · " + tl(o.tut) + " · " + yonTxt(o), "İşle"])));
-  return l;
-}
-function mOz() {
-  const s = stats(), w = warnings().slice(0, 5), up = calItems().filter(c => c[0] <= 10).slice(0, 6), hl = live(S.har).sort((a, b) => b.tar.localeCompare(a.tar) || b.t - a.t).slice(0, 5), np = mPend().length;
-  return mHead("Özet") +
-    '<div class="hero"><small>Net varlık</small><div class="v">' + col(s.net) + '</div><small>' + GOST.kalan.ad + ': <b>' + col(s.rem) + '</b> · kasa ' + tl(s.kasa) + '</small></div>' +
-    '<div class="g"><div class="st"><small>Bu dönem gelir</small><b>' + tl(s.inc) + '</b></div><div class="st"><small>Bu dönem gider</small><b>' + tl(s.exp + s.har) + '</b></div></div>' +
-    (np ? '<div class="w i" style="margin-top:10px">' + np + ' onay bekliyor. <button class="sm" data-a="mt" data-t="onay">Onaylara git</button></div>' : "") +
-    '<div class="ac"><button data-a="fabx" data-c="ab">🤔 Bunu alabilir miyim?</button><button data-a="mstr">📊 Strateji</button><span class="mu" style="align-self:center">Gelir kesilirse ' + ayTxt(runway().ay) + ' dayanırsın</span></div>' +
-    (w.length ? '<h2>Uyarılar</h2>' + w.map(x => '<div class="w ' + x[0] + '">' + x[1] + '</div>').join("") : "") +
-    insightHtml() +
-    '<h2>Nakit tahmini <button class="sm" data-a="mtah" style="float:right">Ayrıntı</button></h2><div class="box">' + tahMini() + '</div>' +
-    '<h2>Yaklaşan (10 gün)</h2><div class="box">' + (up.map(c => row(c[1], dayTxt(c[0]), (c[2] > 0 ? "+" : "−") + tl(Math.abs(c[2])))).join("") || '<p class="mu">Yaklaşan ödeme veya gelir yok.</p>') + '</div>' +
-    '<h2>Son harcamalar</h2><div class="box">' + (hl.map(h => row(esc(h.kat) + (h.not ? " · " + tagHtml(h.not) : ""), dt(h.tar) + " · " + (h.yon === "kart" ? esc(cardName(h.kart)) : h.yon === "hesap" ? esc(accName(h.acc)) : "nakit"), tl(h.tut))).join("") || '<p class="mu">Henüz harcama yok. ➕ Ekle sekmesinden başla.</p>') + '</div>';
-}
-function mEkle() {
-  const hl = live(S.har).sort((a, b) => b.tar.localeCompare(a.tar) || b.t - a.t).slice(0, 15);
-  return mHead("Ekle") +
-    '<div class="big"><button class="p" data-a="fabx" data-c="har"><b>🛒</b>Harcama</button><button data-a="fabx" data-c="income"><b>💰</b>Gelir</button>' +
-    '<button data-a="fabx" data-c="sms"><b>📋</b>SMS\'ten ekle</button><button data-a="fabx" data-c="pay"><b>💳</b>Ödeme yap</button>' +
-    '<button data-a="fabx" data-c="trf"><b>🔁</b>Transfer</button><button data-a="mt" data-t="onay"><b>✅</b>Onaylar' + (mPend().length ? ' <span class="nb">' + mPend().length + '</span>' : "") + '</button></div>' +
-    '<h2>Son harcamalar</h2><div class="box">' + (hl.map(h => row(esc(h.kat) + (h.src === "metin" ? ' <span class="bd">SMS</span>' : "") + (h.not ? '<small>' + tagHtml(h.not) + '</small>' : ""), dt(h.tar) + " · " + (h.yon === "kart" ? esc(cardName(h.kart)) : h.yon === "hesap" ? esc(accName(h.acc)) : "nakit"), tl(h.tut),
-      ' <button class="sm" data-a="foto" data-i="' + esc(h.id) + '" aria-label="Fiş fotoğrafı">' + (h.foto ? "🧾" : "📎") + '</button>' + (h.gid ? "" : btn("del", "har", h.id, "Sil", "sm")))).join("") || '<p class="mu">Henüz harcama yok.</p>') + '</div>' +
-    '<p class="mu">Harcama düzenlenemez; yanlışsa silip yeniden ekle. Silince hesap ve kart üzerindeki etkisi geri alınır.</p>';
-}
-function mOnay() {
-  const l = mPend();
-  return mHead("Onaylar") + '<p class="mu">Gelir günü gelen maaş, ödeme günü gelen sabit giderler ve kesimi geçmiş kart ekstreleri burada onaylanır. Onaylamadan hiçbir şey işlenmez.</p>' +
-    '<div class="box">' + (l.map(x => row(x[3], x[4], "", ' <button class="sm p" data-a="' + x[0] + '" data-i="' + esc(x[2]) + '">' + x[5] + '</button>')).join("") || '<p class="ok" style="margin:10px 0">✅ Bekleyen onay yok.</p>') + '</div>';
-}
-function mBorc() {
-  const s = stats(), ac = bySira(act(S.acc)), cd = bySira(act(S.cards)), ln = bySira(act(S.loans)).filter(o => o.kalan > 0), km = bySira(act(S.kmh)), el = bySira(live(S.elden)).filter(o => o.kalan > 0);
-  const pb = (c, o) => btn("pay", c, o.id, "Öde", "sm p");
-  return mHead("Hesaplar") +
-    '<div class="g"><div class="st"><small>Kasa (banka + nakit)</small><b>' + tl(s.liq) + '</b></div><div class="st"><small>Toplam borç</small><b>' + tl(s.tot) + '</b></div></div>' +
-    '<h2>Banka ve nakit</h2><div class="box">' + (ac.map(a => row(esc(a.ad), isBank(a) ? "banka" : "nakit", col(a.bak))).join("") || '<p class="mu">Hesap yok. PC sürümünde Kasa\'dan ya da formlardaki "+ Yeni hesap" ile ekleyebilirsin.</p>') + '</div>' +
-    (cd.length ? '<h2>Kartlar</h2><div class="box">' + cd.map(o => { const st = cardSt(o); return row(esc(o.bank) + " kartı" + (o.son4 ? " ··" + esc(o.son4) : ""), "son ödeme " + dt(o.son) + " · asgari kalan " + tl(st.due) + (st.k === "tam" ? " · ✅ ödendi" : st.k === "asg" ? " · asgari ödendi" : ""), tl(cardBal(o)), " " + pb("cards", o)) }).join("") + '</div>' : "") +
-    (ln.length ? '<h2>Krediler</h2><div class="box">' + ln.map(o => row(esc(o.bank + " " + o.tur), "taksit " + tl(o.taksit) + " · her ayın " + o.gun + "'i · " + o.kal + " taksit kaldı" + (monthPaid(o) >= o.taksit ? " · ✅ bu dönem ödendi" : ""), tl(o.kalan), " " + pb("loans", o))).join("") + '</div>' : "") +
-    (km.length ? '<h2>KMH</h2><div class="box">' + km.map(o => row(esc(o.bank) + " KMH", "bu dönem faiz " + tl(kmhDue(o)), tl(o.kul), o.kul > 0 ? " " + pb("kmh", o) : "")).join("") + '</div>' : "") +
-    (el.length ? '<h2>Elden borçlar</h2><div class="box">' + el.map(o => row(esc(o.kime), o.sekil === "tks" ? "taksit " + tl(Math.min(o.tks, o.kalan)) : o.vade ? "vade " + dt(o.vade) : "", tl(o.kalan), " " + pb("elden", o))).join("") + '</div>' : "");
-}
-function mAyar() {
-  const u = usage(), F = audit(), nr = F.filter(f => f.sev === "r").length, gy = S.set.sonYedek ? Math.floor((Date.now() - S.set.sonYedek) / 864e5) : null;
-  const t = (a, h, s) => '<button class="tile" data-a="' + a + '"><b>' + h + '</b><small>' + s + '</small></button>';
-  return mHead("Ayarlar") + '<div class="mset" style="display:grid;gap:8px">' +
-    t("myedek", "💾 Yedek al", gy == null ? "Henüz yedek alınmadı" : "Son yedek " + (gy ? gy + " gün önce" : "bugün")) +
-    t("myukle", "📂 Yedek yükle", "PC'den aldığın yedek dosyasını buraya birleştir") +
-    t("mgor", "🎨 Görünüm", "Tema, tutar gizleme, ay başlangıcı, yedek hatırlatma") +
-    t("mguv", "🔒 Güvenlik", "PIN değiştir, otomatik kilit") +
-    t("mstr", "📊 Strateji ve analiz", "Finansal sağlık, dayanma süresi, borç yol haritası, stres testleri") +
-    t("mden", "🩺 Veri denetimi", nr ? nr + " tutarsızlık var" : "Tutarsızlık yok") + '</div>' +
-    '<h2>Bu cihaz</h2><p class="mu">Tahmini depolama: %' + u.pct + ' · Veriler yalnızca bu telefonda, PIN ile şifreli. Ayrıntılı ekranlar (bütçe, birikim, strateji, Excel/PDF) PC sürümünde; iki cihazı aynı yedek dosyasıyla eşitleyebilirsin.</p>';
-}
-const mStr = () => mHead("Strateji") + '<button class="sm" data-a="mt" data-t="oz">← Özet</button>' + healthHtml() + runwayHtml() + roadmapHtml(stats().D, 0) + reelHtml() + (S.set.icg ? insightHtml(true) : "") + stressHtml() + badgeHtml() + '<p class="mu">Karar laboratuvarı, hedef dağıtımı ve ayrıntılı tablolar PC sürümünde.</p>';
-const MV = {str: mStr, oz: mOz, ekle: mEkle, onay: mOnay, borc: mBorc, ayar: mAyar, tah: () => mHead("Tahmin") + '<button class="sm" data-a="mt" data-t="oz">← Özet</button>' + tahHtml().replace("<h1>Nakit tahmini</h1>", "")};
-const MSET = {
-  mgor: () => modal('<h2 style="margin-top:0">Görünüm</h2><div class="fl">' +
-    '<div class="fld"><label>Tema</label><select id="sg_t">' + selO([["auto", "Cihaza göre"], ["light", "Açık"], ["dark", "Koyu"]], S.set.tema) + '</select></div>' +
-    '<div class="fld"><label>Varsayılan hesap</label><select id="sg_h">' + accOpts(S.set.vh, "Seçilmedi", false) + '</select></div>' +
-    '<div class="fld"><label>Ay başlangıcı (bütçe dönemi)</label><select id="sg_b">' + selO([[1, "Takvim ayı (1'i – ay sonu)"]].concat(Array.from({length: 27}, (_, i) => [i + 2, "Her ayın " + (i + 2) + "'i – ertesi ayın " + (i + 1) + "'i"])), S.set.ayBas) + '</select></div>' +
-    '<div class="fld"><label>Yedek hatırlatması</label><select id="sg_y">' + selO([[7, "7 günde bir"], [14, "14 günde bir"], [30, "30 günde bir"], [0, "Kapalı"]], S.set.hat) + '</select></div>' +
-    '<div class="fld full"><label class="cb"><input type="checkbox" id="sg_g"' + (S.set.gizle ? " checked" : "") + '> Tutarları gizle (•••)</label><label class="cb"><input type="checkbox" id="sg_i"' + (S.set.icg ? " checked" : "") + '> Özet\'te içgörüleri göster</label><input type="checkbox" id="sg_r" hidden' + (S.set.rozet ? " checked" : "") + '><input type="checkbox" id="sg_k" hidden' + (S.set.kur ? " checked" : "") + '></div></div>' + okNo("gorok")),
-  mguv: () => modal('<h2 style="margin-top:0">Güvenlik</h2><label>Otomatik kilit</label><select id="sv_k">' + selO([[1, "1 dakika"], [5, "5 dakika"], [15, "15 dakika"], [0, "Kapalı"]], S.set.kilit) + '</select>' +
-    '<h3>PIN değiştir</h3><label>Yeni PIN (6 hane)</label><input type="password" id="np1" inputmode="numeric" maxlength="6" autocomplete="new-password"><label>Yeni PIN tekrar</label><input type="password" id="np2" inputmode="numeric" maxlength="6" autocomplete="new-password">' +
-    '<p class="mu">PIN alanlarını boş bırakırsan PIN değişmez.</p><div id="sve"></div>' + okNo("guvok")),
-  mden: () => { const F = audit(); modal('<h2 style="margin-top:0">Veri denetimi</h2>' + (F.length ? F.slice(0, 30).map((f, j) => '<div class="w ' + (f.sev === "r" ? "r" : f.sev === "i" ? "i" : "") + '" style="margin:6px 0"><b>' + esc(f.ad) + '</b><br><small>' + esc(f.ac) + '</small><br><small><b>Öneri:</b> ' + esc(f.oneri) + '</small>' + (f.fix ? '<div class="ac"><button class="sm p" data-a="denfix" data-k="' + j + '">Düzelt (önce yedek alınır)</button></div>' : "") + '</div>').join("") : '<p class="ok">✅ Tutarsızlık bulunmadı.</p>') + '<div class="ac"><button data-a="no">Kapat</button></div>') }
-};
+/* ---------- PC tıklama yönlendirici: gezinme ve PC'ye özgü öğeler; geri kalanı ortak actCommon() ---------- */
+const SUBSET = {gel: v => GL = v, gid: v => GS = v, kasa: v => HS = v};
 document.addEventListener("click", e => {
   const b = e.target.closest("[data-a]");
   if (!b) return;
   const a = b.dataset.a, c = b.dataset.c, i = b.dataset.i;
-  if (loginClick(a, b)) return;
+  if (loginClick(a, b)) return; // kilitliyken de çalışanlar (ortak giriş modülü)
   if (a === "ebx") { $("#eb").style.display = "none"; return }
   if (!S) return;
+  if (a !== "fab") $("#fabm").classList.remove("on"); // hızlı işlem menüsü başka bir yere basınca kapanır
+  if (a === "fab") { const on = $("#fabm").classList.toggle("on"); $("#fab").setAttribute("aria-expanded", on); return }
   if (roBlock(a, c)) return;
-  if (a === "mt") { MT = b.dataset.t; closeM(); scrollTo(0, 0) }
-  else if (a === "mtah" || a === "mstr") { MT = a === "mtah" ? "tah" : "str"; scrollTo(0, 0) }
-  else if (a === "myedek") return askBackup();
-  else if (a === "myukle") return $("#fi").click();
-  else if (MSET[a]) return MSET[a]();
-  else { actCommon(a, b, c, i); if (a === "denfix" && isOpen("#m")) MSET.mden(); return }
+  if (a === "kysec") { kyPick().then(ok => { if (ok) modal(vKlasor()); render() }); return }
+  if (a === "kyrun") { closeM(); kyRun(); return }
+  if (a === "kyunut") { if (confirm("Bu klasöre artık yedek yazılmasın mı? Klasördeki dosyalar silinmez.")) kyForget().then(() => { closeM(); render() }); return }
+  if (a === "menu") {
+    const o = document.body.classList.toggle("open");
+    $("#mn").setAttribute("aria-expanded", o);
+    return;
+  }
+  if (a === "set") {
+    if (c === "yedek") return askBackup();
+    if (c === "yukle") return $("#fi").click();
+    if (SETM[c]) return SETM[c]();
+    SETV = c;
+  }
+  else if (a === "setb") SETV = "";
+  else if (a === "tab" || a === "navTo") {
+    T = b.dataset.t;
+    if (b.dataset.s && SUBSET[T]) SUBSET[T](b.dataset.s);
+    if (T === "set") SETV = "";
+    closeM();
+    if (innerWidth < 900) { document.body.classList.remove("open"); $("#mn").setAttribute("aria-expanded", false) }
+  }
+  else if (a === "gs") GS = c;
+  else if (a === "gl") GL = c;
+  else if (a === "hs") HS = c;
+  else if (a === "hf") HF = c;
+  else if (a === "hfa") { T = "kasa"; HS = "har"; HF = "led"; LF = i; delete FLT.led }
+  else if (a === "sort") { const s = SORT[c], kk = +b.dataset.k; SORT[c] = s && s[0] === kk ? [kk, -s[1]] : [kk, 1] }
+  else if (a === "sortx") delete SORT[c];
+  else if (a === "fltx") delete FLT[c];
+  else if (a === "calnav") { CALM += +c; CALD = "" }
+  else if (a === "cald") CALD = CALD === c ? "" : c;
+  else if (a === "std") STD = !STD;
+  else { actCommon(a, b, c, i); return }
   render();
 });
+/* PC klavye kısayolları (kilit açıkken; yazı alanında ya da pencere açıkken çalışmaz, Esc hariç) */
+document.addEventListener("keydown", e => {
+  if (!S) return;
+  if (e.key === "Escape") return; // ortak giriş modülünde
+  if (isOpen("#m") || isOpen("#m2") || e.ctrlKey || e.metaKey || e.altKey || /INPUT|SELECT|TEXTAREA/.test((e.target || {}).tagName || "")) return;
+  const key = (e.key || "").toLocaleLowerCase("tr"), tabs = ["panel", "gel", "gid", "kasa", "strat", "set"];
+  if (/^[1-6]$/.test(key)) { e.preventDefault(); T = tabs[+key - 1]; SETV = ""; render(); return }
+  const K = {h: () => openForm("har"), g: () => openForm("income"), t: () => openTrf(), "?": () => SETM.keys(), p: () => { S.set.gizle = !S.set.gizle; save(); render() }};
+  if (K[key]) { e.preventDefault(); if (RO && !["?", "p"].includes(key)) return alert("Bu sekme salt okunur."); K[key]() }
+});
+
+/* ---------- Başlangıç ---------- */
+const VIEWS = {panel: vPanel, gel: vGelW, gid: vGidW, kasa: vKasaW, strat: vStrat, set: vSet};
+/* Üst çubuk: bulunulan yer, bütçe dönemi ve sık kullanılan gerçek işlemler (hepsi mevcut eylemleri çağırır) */
+const TOPL = {panel: "Genel bakış", gel: "Gelirler ve alacaklar", gid: "Giderler, borçlar ve kartlar", kasa: "Hesaplar, birikim ve hedefler", strat: "Strateji ve raporlar", set: "Ayarlar, yedekleme ve güvenlik"};
+const topBar = () => '<div class="tt"><small>Kişisel finans</small><b>' + TOPL[T in TOPL ? T : "panel"] + '</b></div>' +
+  '<div class="tr"><span class="per" title="Bütçe dönemi (Ayarlar → Görünüm ve kullanım → Ay başlangıcı)">📅 ' + esc(perL(CP())) + '</span>' +
+  '<button data-a="set" data-c="disa">Dışa aktar</button><button data-a="trfm">Transfer</button><button class="p" data-a="add" data-c="har">+ Harcama ekle</button></div>';
 function render() {
   document.body.classList.toggle("locked", !S);
-  if (!S) { $("#app").innerHTML = vLogin(); return }
-  const q = EKQ && !RO; // açılıştan sonraki ilk çizim: onay gerektirmeyenler işlenir, sonra bekleyen onaylar sorulur
-  if (q) { EKQ = false; autoRun(); save() }
-  const gy = S.set.hat && S.set.sonYedek ? (Date.now() - S.set.sonYedek) / 864e5 : 0;
-  $("#app").innerHTML = safetyBanner() + (gy > S.set.hat ? '<div class="w" style="margin-bottom:8px">Son yedek ' + Math.floor(gy) + ' gün önce. <button class="sm" data-a="myedek">Yedek al</button></div>' : "") + (MV[MT] || mOz)();
-  const np = mPend().length;
-  document.querySelectorAll("#tb button").forEach(x => x.classList.toggle("on", x.dataset.t === MT));
-  $('#tb [data-t="onay"] span').innerHTML = "Onaylar" + (np ? ' <span class="nb">' + np + '</span>' : "");
-  if (q) nextTask();
+  if (!S) { $("#top").innerHTML = ""; $("#app").innerHTML = vLogin(); return }
+  $("#top").innerHTML = topBar();
+  const q = EKQ && !RO; // açılıştan sonraki ilk çizim; salt okunur sekmede otomatik işlem ve onay yok
+  if (q) { EKQ = false; autoRun(); save() } // onay gerektirmeyen gelir/giderler sormadan işlenir
+  $("#app").innerHTML = kyBanner() + safetyBanner() + (VIEWS[T] || vPanel)();
+  $("#gz").textContent = S.set.gizle ? "🙈" : "👁";
+  $("#th").textContent = THI[S.set.tema]; $("#th").title = "Tema: " + THL[S.set.tema] + " (değiştirmek için bas)";
+  document.querySelectorAll("nav button").forEach(b => b.classList.toggle("on", b.dataset.t === T));
+  cardTables(); // telefonda geniş tablolar kart görünümüne geçer (CSS, yalnızca dar ekranda)
+  document.querySelectorAll(".sub button.on").forEach(b => { const p = b.parentElement; if (b.offsetLeft < p.scrollLeft || b.offsetLeft + b.offsetWidth > p.scrollLeft + p.clientWidth) p.scrollLeft = b.offsetLeft - 16 }); // seçili alt sekme görünür kalsın
+  if (q) nextTask(); // bekleyen ekstre / gelir / gider onayları
 }
 applyTheme();
-// Web adresinden açılınca (ör. GitHub Pages) uygulama çevrimdışı çalışsın ve ana ekrana eklenebilsin: manifest + service worker yalnızca http(s)'de
+if (innerWidth >= 900) { document.body.classList.add("open"); $("#mn").setAttribute("aria-expanded", true) }
+addEventListener("resize", () => { if (innerWidth >= 900) document.body.classList.add("open") });
+// Web adresinden açılınca (ör. GitHub Pages) çevrimdışı çalışsın ve ana ekrana eklenebilsin: manifest + service worker yalnızca http(s)'de
 if (/^https?:/.test(location.protocol)) {
   try { const l = document.createElement("link"); l.rel = "manifest"; l.href = "manifest.webmanifest"; document.head.appendChild(l) } catch (e) {}
   if (navigator.serviceWorker) navigator.serviceWorker.register("sw.js").catch(() => {});
 }
-setTimeout(() => { L.splash = false; render() }, 900);
+setTimeout(() => { L.splash = false; render() }, 1200);
 render();
-
 </script>
 </body>
 </html>

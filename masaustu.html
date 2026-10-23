@@ -303,6 +303,45 @@ table.rt td b{font-weight:600}
   #pr th,#pr td{border-bottom:1px solid #bbb;padding:2pt 4pt;text-align:left;font-size:9pt;color:#000;background:none}
   #pr tr{page-break-inside:avoid}
 }
+
+/* ===== Telefon (Y4, v17): aynı tam uygulama; dokunma alanları büyür, pencereler tam ekran, geniş tablolar kart olur ===== */
+@media (max-width:899px){
+  button{min-height:44px}
+  button.sm{min-height:44px;padding:6px 12px}
+  .chips button{min-height:44px}
+  button.th{min-height:0}
+  .sub button{min-height:46px}
+  summary{padding:11px 0;min-height:44px}
+  details.it>summary{padding:6px 0}
+  button.tag{min-height:26px}
+  input[type=checkbox],input[type=radio]{width:22px;height:22px}
+  input:not([type=checkbox]):not([type=radio]),select{min-height:46px}
+  #m>div{margin:0;width:100%;max-width:none;min-height:100%;border-radius:0;border:0;box-shadow:none;padding:calc(16px + env(safe-area-inset-top,0px)) 16px calc(16px + env(safe-area-inset-bottom,0px))}
+  #m>div>.ac:last-child{position:sticky;bottom:0;z-index:1;background:var(--sf);margin:14px -16px calc(-16px - env(safe-area-inset-bottom,0px));padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--ln2)}
+  #m>div>.ac:last-child>button{flex:1 1 auto}
+  #m2>div{margin:8vh auto}
+  body:not(.locked)::before{content:"";position:fixed;top:0;left:0;right:0;height:calc(62px + env(safe-area-inset-top,0px));background:var(--bg);box-shadow:0 1px 0 var(--ln);z-index:13} /* üst düğmeler kayan içeriğin üstünde okunur kalsın */
+  #fabm{left:12px;right:12px;min-width:0}
+  #fabm button{min-height:48px}
+  .cd{min-height:48px}
+}
+@media (max-width:640px){
+  table.ct,table.ct>tbody,table.ct>tbody>tr,table.ct>tbody>tr>td{display:block;width:100%}
+  table.ct tr.ch{display:none}
+  table.ct>tbody>tr{padding:10px 14px;border-bottom:1px solid var(--ln)}
+  table.ct>tbody>tr:last-child{border-bottom:0}
+  table.ct>tbody>tr>td{display:flex;justify-content:space-between;align-items:center;gap:12px;border:0;padding:3px 0;text-align:right!important;white-space:normal!important;min-width:0}
+  table.ct>tbody>tr>td::before{content:attr(data-l);color:var(--mu);font-size:12px;font-weight:500;text-align:left;flex:0 1 45%}
+  table.ct>tbody>tr>td.c0{display:block;text-align:left!important;font-size:14px;font-weight:600;padding:0 0 4px}
+  table.ct>tbody>tr>td.c0::before,table.ct>tbody>tr>td[data-l=""]::before{content:none}
+  table.ct>tbody>tr>td[data-l=""]{justify-content:flex-end}
+  table.ct>tbody>tr>td.x{justify-content:flex-end;flex-wrap:wrap;padding-top:6px}
+  table.ct>tbody>tr>td.x::before{content:none}
+  table.ct>tbody>tr>td.hdl,table.ct>tbody>tr>td:empty{display:none}
+  table.ct td input{min-width:0;max-width:60%}
+  table.ct tr:hover td{background:none}
+  .tw:has(table.ct){overflow:visible}
+}
 </style>
 </head>
 <body>
@@ -452,7 +491,7 @@ function cleanP(p) {
 }
 /* Kullanıcı ayarları */
 const VIEWK = ["panel", "gel", "gid", "kasa", "strat", "set"];
-const SETD = () => ({tema: "light", kilit: 5, acilis: "panel", vh: "", gizle: false, ayBas: 1, onay: {ek: true, gel: true, gid: true}, bhedef: null, sonYedek: 0, hat: 14, enf: null, icg: true, rozet: true, kur: false, kurT: 0, icgx: [], koruma: 0});
+const SETD = () => ({tema: "light", kilit: 5, acilis: "panel", vh: "", gizle: false, ayBas: 1, onay: {ek: true, gel: true, gid: true}, bhedef: null, sonYedek: 0, hat: 14, enf: null, icg: true, rozet: true, kur: false, kurT: 0, icgx: [], koruma: 0, ky: "", kyT: 0});
 function cleanSet(s) {
   const d = SETD();
   s = s && typeof s === "object" ? s : {};
@@ -461,7 +500,7 @@ function cleanSet(s) {
     acilis: VIEWK.includes(ac) ? ac : d.acilis, vh: safeId(s.vh), gizle: !!s.gizle, ayBas: Math.max(1, Math.min(28, Math.round(toN(s.ayBas)) || 1)),
     onay: {ek: on.ek !== false, gel: on.gel !== false, gid: on.gid !== false}, bhedef: s.bhedef == null || s.bhedef === "" ? null : Math.max(0, toN(s.bhedef)),
     sonYedek: Math.max(0, toN(s.sonYedek)), hat: [0, 7, 14, 30].includes(+s.hat) ? +s.hat : d.hat,
-    enf: s.enf == null || s.enf === "" ? null : Math.max(-50, Math.min(500, toN(s.enf))), icg: s.icg !== false, rozet: s.rozet !== false, kur: !!s.kur, kurT: Math.max(0, toN(s.kurT)), icgx: arr(s.icgx).map(x => String(x).slice(0, 80)).slice(-100), koruma: Math.max(0, toN(s.koruma))}; // koruma: kasanın altına inmemesi istenen tutar (kuruş) // icgx: gizlenen içgörü anahtarları
+    enf: s.enf == null || s.enf === "" ? null : Math.max(-50, Math.min(500, toN(s.enf))), icg: s.icg !== false, rozet: s.rozet !== false, kur: !!s.kur, kurT: Math.max(0, toN(s.kurT)), icgx: arr(s.icgx).map(x => String(x).slice(0, 80)).slice(-100), koruma: Math.max(0, toN(s.koruma)), ky: String(s.ky || "").slice(0, 80), kyT: Math.max(0, toN(s.kyT))}; // ky: yedek klasörünün adı (tanıtıcı IndexedDB fp-ky'de) · kyT: son klasör yedeğinin zamanı // koruma: kasanın altına inmemesi istenen tutar (kuruş) // icgx: gizlenen içgörü anahtarları
   // sonYedek: son şifreli yedek zamanı · hat: yedek hatırlatma aralığı (gün; 0 kapalı) · enf: yıllık enflasyon varsayımı (%) · icg: içgörüler · rozet: rozetler · kur: internetten döviz kuru
 }
 
@@ -660,8 +699,8 @@ function load() {
   return cs.length ? mig(cs[0]) : mig(sample());
 }
 /* Kayıt: salt okunur sekme yazmaz; kilit başka sekmeye geçtiyse yazmadan salt okunura döner; hata yutulmaz, yazılan veri okunup doğrulanır */
-function save() {
-  S.t = Date.now();
+function save(keepT) {
+  if (!keepT) S.t = Date.now(); // keepT: yalnızca yedek damgası gibi veri sayılmayan bir alan yazılırken son değişiklik zamanı korunur
   snapNow();
   pruneAkt(S);
   if (!KEY || RO) return;
@@ -2361,6 +2400,17 @@ function warnings() {
   calItems().forEach(c => { if (c[2] < 0 && c[0] <= 5) w.push([c[0] < 0 ? "r" : "", c[1] + " " + dayTxt(c[0])]) });
   return w;
 }
+/* Telefonda geniş tablolar kart görünümüne geçer (Y4): başlık satırındaki adlar her hücreye etiket olarak yazılır, görünüm CSS'te (≤ 640 px).
+   Masaüstünde tablo aynen kalır; veri ve hesap değişmez. */
+function cardTables(root) {
+  (root || document.getElementById("app")).querySelectorAll("table").forEach(t => {
+    const rs = [...t.rows], h = rs[0];
+    if (!h || ![...h.cells].every(c => c.tagName === "TH") || rs.length < 2) return;
+    const ad = []; [...h.cells].forEach(c => { for (let j = 0; j < (c.colSpan || 1); j++) ad.push(c.textContent.replace(/\s+/g, " ").trim()) });
+    h.classList.add("ch"); t.classList.add("ct");
+    rs.slice(1).forEach(r => { let i = 0, ilk = true; [...r.cells].forEach(c => { if (c.tagName === "TD") { c.dataset.l = ad[i] || ""; if (ilk && !c.classList.contains("hdl")) { c.classList.add("c0"); ilk = false } } i += c.colSpan || 1 }) });
+  });
+}
 /* [ÇEKİRDEK] Etiketler: notlardaki #kelime */
 const TAGRE = /#([\p{L}\p{N}_-]{2,30})/gu;
 const tagsOf = s => [...new Set([...String(s || "").matchAll(TAGRE)].map(m => m[1].toLocaleLowerCase("tr")))];
@@ -2885,7 +2935,7 @@ function vStrat() {
 const AKT = {ekle: "Ekleme", duzenle: "Düzenleme", sil: "Silme", odeme: "Ödeme", tahsilat: "Tahsilat", geri: "Geri alma", transfer: "Transfer", ekstre: "Ekstre", gelir: "Gelir onayı", gider: "Gider onayı", fiyat: "Fiyat girişi", ayar: "Ayar", yedek: "Yedek / aktarım", sistem: "Sistem"};
 const KEYS = [["H", "Harcama ekle"], ["G", "Gelir ekle"], ["T", "Transfer"], ["P", "Tutarları gizle / göster"], ["1 – 6", "Menü: Özet, Gelirler, Giderler, Kasa, Strateji, Ayarlar"], ["Esc", "Açık pencereyi kapat"], ["?", "Bu listeyi göster"]];
 let SETV = "", AF = "";
-const SETI = [["yedek", "💾 Yedek al", "Şifreli yedek dosyası"], ["yukle", "📂 Yedek yükle", "Dosyadan yükle ve birleştir"], ["disa", "📤 Dışa aktar", "Excel, PDF veya şifresiz dosya"],
+const SETI = [["yedek", "💾 Yedek al", "Şifreli yedek dosyası"], ["klasor", "📁 Klasöre / buluta yedek", "OneDrive, Google Drive, iCloud, harici bellek"], ["yukle", "📂 Yedek yükle", "Dosyadan yükle ve birleştir"], ["disa", "📤 Dışa aktar", "Excel, PDF veya şifresiz dosya"],
   ["gor", "🎨 Görünüm ve kullanım", "Tema, açılış ekranı, tutar gizleme, varsayılan hesap, ay başlangıcı"], ["guv", "🔒 Güvenlik", "PIN değiştir, otomatik kilit"], ["onay", "🔔 Onay pencereleri", "Ekstre, gelir ve gider onayları"],
   ["oran", "📊 Oran tablosu", "KKDF, BSMV, stopaj, asgari ödeme, faiz kademeleri"], ["kat", "🏷️ Kategoriler", "Harcama kategorileri"], ["cal", "💼 Çalışma bilgisi", "Çalışma türü ve sektör"],
   ["log", "📜 İşlem kaydı", "Son 12 ayın tüm veri girişleri"], ["keys", "⌨️ Klavye kısayolları", "Hızlı ekleme ve menü tuşları"], ["veri", "🗂️ Veri işlemleri", "Örnek veri, boşaltma, tümünü silme"], ["den", "🩺 Veri denetimi", "Bakiye, transfer, tekrar kayıt ve tutarsızlık kontrolü"], ["test", "✅ Hesap testleri", "Hesaplama motorunun kontrolleri"]];
@@ -2916,6 +2966,7 @@ function vSet() {
   return '<h1>Ayarlar</h1><div class="g setg">' + SETI.map(x => '<button class="tile" data-a="set" data-c="' + x[0] + '"><b>' + x[1] + '</b><small>' + x[2] + (x[0] === "veri" ? " · depolama ~%" + u.pct : "") + '</small></button>').join("") + '</div>';
 }
 const SETM = {
+  klasor: () => modal(vKlasor()),
   gor: () => modal('<h2 style="margin-top:0">Görünüm ve kullanım</h2><div class="fl">' +
     '<div class="fld"><label>Tema</label><select id="sg_t">' + selO([["auto", "Cihaza göre"], ["light", "Açık"], ["dark", "Koyu"]], S.set.tema) + '</select></div>' +
     '<div class="fld"><label>Açılış ekranı</label><select id="sg_a">' + selO(VIEWK.map(v => [v, document.querySelector('nav [data-t="' + v + '"] .nl').textContent.trim()]), S.set.acilis) + '</select></div>' +
@@ -3026,7 +3077,7 @@ const F = {
   plan: [["ad", "Açıklama (ör. araç sigortası, ikramiye)"], ["tip", "Yön", "s"], ["tut", "Tutar (TL)", "m"], ["tar", "Tarih", "d"]],
   hdf: [["ad", "Hedef adı"], ["hedef", "Hedef tutar (TL)", "m"], ["tarih", "Hedef tarih", "d0"], ["onc", "Öncelik sırası (1 = en önce)", "n"], ["bagli", "Bağlı birikimler", "ms"]]
 };
-const modal = h => { $("#mf").innerHTML = h; $("#m").style.display = "block" };
+const modal = h => { $("#mf").innerHTML = h; $("#m").style.display = "block"; $("#m").scrollTop = 0; if (typeof cardTables === "function") cardTables($("#mf")) };
 const closeM2 = () => { $("#m2").style.display = "none"; NW = null };
 const closeM = () => { $("#m").style.display = "none"; closeM2() };
 const okNo = (a, t = "Kaydet") => '<div class="ac"><button class="p" data-a="' + a + '">' + t + '</button><button data-a="no">Vazgeç</button></div>';
@@ -3939,6 +3990,12 @@ function vLogin() {
   }
   // Önceki sürümde şifreyle oluşturulmuş profil
   if (!p.pin) return '<h1>Giriş</h1>' + er + '<label>Önceki sürümde belirlediğin şifre</label><input id="pw" type="password" autocomplete="current-password"><div class="ac"><button class="p" data-a="unlock">Aç</button></div><p class="mu">Girdikten sonra Ayarlar → Güvenlik bölümünden 6 haneli PIN’e geç.</p>';
+  // Açılışta önce karşılama ekranı; PIN tuş takımı "Giriş yap"a basınca gelir (hata/kilit durumunda doğrudan PIN ekranı)
+  if (!L.gir && !L.err && !BUSY) {
+    const h = new Date().getHours(), sel = h < 5 ? "İyi geceler" : h < 12 ? "Günaydın" : h < 18 ? "İyi günler" : "İyi akşamlar";
+    return '<div class="wz"><div style="font-size:56px;margin-top:6vh">🧮</div><h1>' + sel + ', hoş geldin</h1><p class="mu">Finans ve Borç Robotu: gelirin, giderin, borçların ve kasan tek yerde.</p>' +
+      '<p class="mu">Verilerin yalnızca bu cihazda, PIN ile şifreli duruyor.</p><div class="ac wac"><button class="p" data-a="gir" style="min-width:160px">Giriş yap</button></div></div>';
+  }
   const lk = Math.ceil((p.until - Date.now()) / 1000);
   const rb = L.bozuk && listBk(p.id).length ? '<div class="ac" style="justify-content:center"><button data-a="bkres0">Önceki sürümün yedeğini geri yükle</button></div>' : "";
   return '<div class="wz"><div style="font-size:40px;margin-top:6vh">🔒</div><h1>PIN giriniz</h1>' + (lk > 0 && !L.err ? '<div class="w r" style="text-align:left">Çok fazla yanlış deneme. ' + lk + ' sn sonra tekrar dene.</div>' : er) + rb + dots() + (BUSY ? '<p class="mu">Açılıyor…</p>' : "") + pad() + '</div>';
@@ -3946,9 +4003,10 @@ function vLogin() {
 /* Kilitliyken de çalışan tıklamalar (PC ve telefon arayüzü ortak); işlendiyse true döner */
 function loginClick(a, b) {
   if (a === "key") { padKey(b.dataset.k); return true }
+  if (a === "gir") { L.gir = true; render(); return true }
   if (a === "wz") { wzGo(b.dataset.k); return true }
   if (a === "unlock") { unlockP().then(render); return true }
-  if (a === "lock") { lockP(); return true }
+  if (a === "lock") { if (typeof kyDirty === "function" && kyDirty() && !confirm("Son klasör yedeğinden sonra değişiklik var. Yedeklemeden kilitlensin mi? (Vazgeç'e basıp üstteki \"Klasöre yedekle\" düğmesini kullanabilirsin.)")) return true; lockP(); return true }
   if (a === "bpok") { pwDone(true); return true }
   if (a === "bpno") { pwDone(false); return true }
   if (a === "bkres0" && !S && PI[0]) { // okunamayan veri: en son taşıma yedeğine dön (şifreli metin olduğu gibi geri konur)
@@ -3964,10 +4022,11 @@ function loginClick(a, b) {
 document.addEventListener("keydown", e => {
   if (S || L.splash) return;
   const inInput = e.target && /INPUT|SELECT|TEXTAREA/.test(e.target.tagName), hasPad = document.querySelector(".pad");
-  if (hasPad && !inInput && /^\d$/.test(e.key)) { e.preventDefault(); padKey(e.key) }
+  if (!hasPad && !inInput && /^\d$/.test(e.key) && document.querySelector('[data-a="gir"]')) { e.preventDefault(); L.gir = true; padKey(e.key) } // karşılama ekranında rakam yazmak doğrudan PIN'e geçer
+  else if (hasPad && !inInput && /^\d$/.test(e.key)) { e.preventDefault(); padKey(e.key) }
   else if (hasPad && !inInput && e.key === "Backspace") { e.preventDefault(); padKey("del") }
   else if (e.key === "Enter") {
-    const b = document.querySelector('[data-a="unlock"],[data-a="wz"][data-k="next"],[data-a="wz"][data-k="finish"]');
+    const b = document.querySelector('[data-a="gir"],[data-a="unlock"],[data-a="wz"][data-k="next"],[data-a="wz"][data-k="finish"]');
     if (b) { e.preventDefault(); b.click() }
   }
 });
@@ -4111,6 +4170,78 @@ document.addEventListener("change", e => {
   }
 });
 
+/* ---------- Klasöre yedek (v17): seçilen klasöre (OneDrive, Google Drive, iCloud Drive, harici bellek) şifreli yedek yazar ----------
+   Uygulama buluta bağlanmaz: dosyayı buluta yükleyen, o klasörü eşitleyen programdır (OneDrive, Google Drive masaüstü, iCloud for Windows).
+   Tarayıcının klasör erişimi (File System Access API) yalnızca masaüstü Chrome / Edge'de vardır; klasör tanıtıcısı IndexedDB'de profil başına durur.
+   Kararlar (PLAN Y1): şifre her yedekte sorulur ve hiçbir yerde tutulmaz; günde bir dosya (aynı gün üzerine yazılır); eski dosyalar silinmez. */
+const KY_OK = () => typeof window.showDirectoryPicker === "function";
+const kyDB = () => new Promise((res, rej) => { const r = indexedDB.open("fp-ky", 1); r.onupgradeneeded = () => r.result.createObjectStore("h"); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error) });
+async function kyGet(id) { const db = await kyDB(); return new Promise((res, rej) => { const q = db.transaction("h").objectStore("h").get(id); q.onsuccess = () => res(q.result || null); q.onerror = () => rej(q.error) }) }
+async function kyPut(id, h) {
+  const db = await kyDB();
+  return new Promise((res, rej) => { const t = db.transaction("h", "readwrite"), o = t.objectStore("h"); if (h) o.put(h, id); else o.delete(id); t.oncomplete = () => res(); t.onerror = () => rej(t.error) });
+}
+let KYH = null; // bu oturumda kullanılan klasör tanıtıcısı
+const kyFile = () => "Finans-Yedek-" + tod() + ".json";
+const kyDirty = () => !!(S && S.set.ky && KY_OK() && S.t > (S.set.kyT || 0)); // son klasör yedeğinden sonra veri değişti mi
+const kyBanner = () => kyDirty() && !RO ? '<div class="w i" style="margin-bottom:10px">Son klasör yedeğinden sonra değişiklik var (' + esc(S.set.ky) + '). <button class="sm p" data-a="kyrun">📁 Klasöre yedekle</button></div>' : "";
+async function kyPerm(h) { // izin, tıklama anında istenir (tarayıcı kuralı)
+  const o = {mode: "readwrite"};
+  if (await h.queryPermission(o) === "granted") return true;
+  return await h.requestPermission(o) === "granted";
+}
+async function kyPick() {
+  let h;
+  try { h = await showDirectoryPicker({id: "finans-yedek", mode: "readwrite"}) } catch (e) { if (e && e.name !== "AbortError") alert("Klasör seçilemedi: " + errTxt(e)); return false }
+  KYH = h;
+  try { await kyPut(P.id, h) } catch (e) { alert("Klasör bu oturumda kullanılacak ama hatırlanamadı (" + errTxt(e) + "); sonraki açılışta yeniden seçmen gerekebilir.") }
+  S.set.ky = String(h.name || "klasör").slice(0, 80); S.set.kyT = 0;
+  logA("ayar", "veri", "Yedek klasörü seçildi: " + S.set.ky); save();
+  return true;
+}
+/* Tıklamayla çalışır: önce klasör izni, sonra yedek şifresi, sonra yazma ve geri okuyarak doğrulama. Hata olursa hiçbir kayıt "yedeklendi" sayılmaz. */
+async function kyRun() {
+  if (RO) return alert("Bu sekme salt okunur; yedek, verinin açık olduğu sekmeden alınır.");
+  if (!KY_OK()) return SETM.klasor();
+  let h = KYH;
+  if (!h) { try { h = KYH = await kyGet(P.id) } catch (e) { h = null } }
+  if (!h) { alert("Yedek klasörü bulunamadı; Ayarlar → Klasöre / buluta yedek bölümünden yeniden seç."); return SETM.klasor() }
+  try { if (!await kyPerm(h)) return alert("Klasöre yazma izni verilmedi. Hiçbir şey yazılmadı.") }
+  catch (e) { return alert("Klasöre erişilemedi (" + errTxt(e) + "). Harici bellek çıkarılmış olabilir; takıp yeniden dene ya da klasörü değiştir.") }
+  const b = await blob(false);
+  if (!b) return; // şifre girilmedi
+  const ad = kyFile();
+  try {
+    const f = await h.getFileHandle(ad, {create: true}), w = await f.createWritable(); // tarayıcı geçici dosyaya yazar, close() ile yerine koyar
+    await w.write(b);
+    await w.close();
+    const geri = await (await f.getFile()).text();
+    if (geri !== await b.text()) throw new Error("yazılan dosya doğrulanamadı");
+  } catch (e) {
+    alert("Yedek klasöre yazılamadı (" + errTxt(e) + "). Klasör silinmiş, harici bellek çıkarılmış ya da disk dolu olabilir. Ayarlar → Yedek al ile dosyayı elle kaydedebilirsin.");
+    return;
+  }
+  logA("yedek", "veri", "Klasöre şifreli yedek: " + S.set.ky + " / " + ad);
+  S.t = Date.now(); S.set.sonYedek = S.t; S.set.kyT = S.t;
+  save(true); // kyT ile aynı zaman damgası kalsın: bu kayıt "yeni değişiklik" sayılmaz
+  render();
+  alert("Yedek yazıldı: " + S.set.ky + " / " + ad + ". Klasör bir bulut klasörüyse dosyayı o programın yüklediğini kontrol et.");
+}
+async function kyForget() {
+  try { await kyPut(P.id, null) } catch (e) {}
+  KYH = null; S.set.ky = ""; S.set.kyT = 0;
+  logA("ayar", "veri", "Yedek klasörü bırakıldı (klasördeki dosyalar silinmedi)"); save();
+}
+function vKlasor() {
+  if (!KY_OK()) return '<h2 style="margin-top:0">Klasöre / buluta yedek</h2><div class="w i">Bu tarayıcı bir klasöre doğrudan yazmayı desteklemiyor. Bu özellik yalnızca bilgisayarda Chrome ve Edge\'de çalışır.</div>' +
+    '<p>Telefonda ya da bu tarayıcıda: <b>Yedek al</b> ile dosyayı indir, sonra Dosyalar / Drive uygulamasıyla iCloud Drive, Google Drive veya OneDrive\'a taşı.</p><div class="ac"><button class="p" data-a="set" data-c="yedek">💾 Yedek al</button><button data-a="no">Kapat</button></div>';
+  const var_ = !!S.set.ky, son = S.set.kyT ? new Date(S.set.kyT).toLocaleString("tr-TR", {dateStyle: "short", timeStyle: "short"}) : "henüz yok";
+  return '<h2 style="margin-top:0">Klasöre / buluta yedek</h2>' +
+    '<p class="mu">Bilgisayarındaki bir klasörü seç; şifreli yedek oraya yazılır. Klasör <b>OneDrive</b>, <b>Google Drive</b> (masaüstü uygulamasının "Drive\'ım" klasörü), <b>iCloud Drive</b> ya da bir <b>harici bellek</b> olabilir. Bulut klasöründeki dosyayı buluta o program yükler; bu uygulama internete bağlanmaz.</p>' +
+    '<div class="ln"><span>Klasör</span><span>' + (var_ ? esc(S.set.ky) : "seçilmedi") + '</span></div><div class="ln"><span>Son klasör yedeği</span><span>' + son + '</span></div>' +
+    '<p class="mu">Her yedekte yedek şifresi sorulur ve saklanmaz. Günde bir dosya oluşur (<code>' + kyFile() + '</code>); aynı gün içindeki yedek o dosyanın üzerine yazılır. Eski dosyalar hiç silinmez; istediğinde kendin silebilirsin. Değişiklik olunca ekranın üstünde "Klasöre yedekle" düğmesi çıkar.</p>' +
+    '<div class="ac"><button class="p" data-a="kysec">' + (var_ ? "Klasörü değiştir" : "📁 Klasör seç") + '</button>' + (var_ ? '<button data-a="kyrun">Şimdi yedekle</button><button data-a="kyunut">Klasörü bırak</button>' : "") + '<button data-a="no">Kapat</button></div>';
+}
 /* ---------- Ortak işlem yönlendirici: veri değiştiren ve pencere açan tıklamalar (PC ve telefon aynı) ----------
    Arayüzün kendi tıklama dinleyicisi önce gezinmeyi işler, sonra actCommon() çağırır; işlendiyse true döner. */
 const RO_OK = ["tab", "navTo", "gs", "gl", "hs", "hf", "hfa", "sort", "sortx", "menu", "lock", "std", "setb", "bqx", "bqm", "bqok", "no", "nwno", "rotake", "xx", "xp", "birm", "gz", "th", "tag", "calnav", "cald", "fltx", "fab", "foto", "yedekal", "mt", "myedek", "mden", "cbok", "enfm", "tahn", "tahk", "mtah", "labo", "labx", "labsel", "stry", "mstr"];
@@ -4358,12 +4489,14 @@ document.addEventListener("click", e => {
   if (!b) return;
   const a = b.dataset.a, c = b.dataset.c, i = b.dataset.i;
   if (loginClick(a, b)) return; // kilitliyken de çalışanlar (ortak giriş modülü)
-  if (a === "mobok") { MOBW = false; try { sessionStorage.setItem("fp-mobok", "1") } catch (_) {} return render() }
   if (a === "ebx") { $("#eb").style.display = "none"; return }
   if (!S) return;
   if (a !== "fab") $("#fabm").classList.remove("on"); // hızlı işlem menüsü başka bir yere basınca kapanır
   if (a === "fab") { const on = $("#fabm").classList.toggle("on"); $("#fab").setAttribute("aria-expanded", on); return }
   if (roBlock(a, c)) return;
+  if (a === "kysec") { kyPick().then(ok => { if (ok) modal(vKlasor()); render() }); return }
+  if (a === "kyrun") { closeM(); kyRun(); return }
+  if (a === "kyunut") { if (confirm("Bu klasöre artık yedek yazılmasın mı? Klasördeki dosyalar silinmez.")) kyForget().then(() => { closeM(); render() }); return }
   if (a === "menu") {
     const o = document.body.classList.toggle("open");
     $("#mn").setAttribute("aria-expanded", o);
@@ -4409,10 +4542,6 @@ document.addEventListener("keydown", e => {
 });
 
 /* ---------- Başlangıç ---------- */
-/* Bu sürüm bilgisayar için tasarlandı; telefonda açılırsa engellenmez, bir kez uyarı gösterilir */
-const isPhone = () => { try { return matchMedia("(pointer:coarse)").matches && Math.min(screen.width, screen.height) < 700 } catch (e) { return false } };
-let MOBW = isPhone() && !(() => { try { return sessionStorage.getItem("fp-mobok") } catch (e) { return false } })();
-const mobBanner = () => MOBW ? '<div class="w i" style="margin-bottom:10px">Bu sürüm bilgisayar için tasarlandı. Telefonda da çalışır ama rahat kullanılmayabilir; telefon sürümü ayrıca hazırlanacak. <button class="sm" data-a="mobok">Tamam</button></div>' : "";
 const VIEWS = {panel: vPanel, gel: vGelW, gid: vGidW, kasa: vKasaW, strat: vStrat, set: vSet};
 /* Üst çubuk: bulunulan yer, bütçe dönemi ve sık kullanılan gerçek işlemler (hepsi mevcut eylemleri çağırır) */
 const TOPL = {panel: "Genel bakış", gel: "Gelirler ve alacaklar", gid: "Giderler, borçlar ve kartlar", kasa: "Hesaplar, birikim ve hedefler", strat: "Strateji ve raporlar", set: "Ayarlar, yedekleme ve güvenlik"};
@@ -4421,20 +4550,26 @@ const topBar = () => '<div class="tt"><small>Kişisel finans</small><b>' + TOPL[
   '<button data-a="set" data-c="disa">Dışa aktar</button><button data-a="trfm">Transfer</button><button class="p" data-a="add" data-c="har">+ Harcama ekle</button></div>';
 function render() {
   document.body.classList.toggle("locked", !S);
-  if (!S) { $("#top").innerHTML = ""; $("#app").innerHTML = mobBanner() + vLogin(); return }
+  if (!S) { $("#top").innerHTML = ""; $("#app").innerHTML = vLogin(); return }
   $("#top").innerHTML = topBar();
   const q = EKQ && !RO; // açılıştan sonraki ilk çizim; salt okunur sekmede otomatik işlem ve onay yok
   if (q) { EKQ = false; autoRun(); save() } // onay gerektirmeyen gelir/giderler sormadan işlenir
-  $("#app").innerHTML = mobBanner() + safetyBanner() + (VIEWS[T] || vPanel)();
+  $("#app").innerHTML = kyBanner() + safetyBanner() + (VIEWS[T] || vPanel)();
   $("#gz").textContent = S.set.gizle ? "🙈" : "👁";
   $("#th").textContent = THI[S.set.tema]; $("#th").title = "Tema: " + THL[S.set.tema] + " (değiştirmek için bas)";
   document.querySelectorAll("nav button").forEach(b => b.classList.toggle("on", b.dataset.t === T));
+  cardTables(); // telefonda geniş tablolar kart görünümüne geçer (CSS, yalnızca dar ekranda)
   document.querySelectorAll(".sub button.on").forEach(b => { const p = b.parentElement; if (b.offsetLeft < p.scrollLeft || b.offsetLeft + b.offsetWidth > p.scrollLeft + p.clientWidth) p.scrollLeft = b.offsetLeft - 16 }); // seçili alt sekme görünür kalsın
   if (q) nextTask(); // bekleyen ekstre / gelir / gider onayları
 }
 applyTheme();
 if (innerWidth >= 900) { document.body.classList.add("open"); $("#mn").setAttribute("aria-expanded", true) }
 addEventListener("resize", () => { if (innerWidth >= 900) document.body.classList.add("open") });
+// Web adresinden açılınca (ör. GitHub Pages) çevrimdışı çalışsın ve ana ekrana eklenebilsin: manifest + service worker yalnızca http(s)'de
+if (/^https?:/.test(location.protocol)) {
+  try { const l = document.createElement("link"); l.rel = "manifest"; l.href = "manifest.webmanifest"; document.head.appendChild(l) } catch (e) {}
+  if (navigator.serviceWorker) navigator.serviceWorker.register("sw.js").catch(() => {});
+}
 setTimeout(() => { L.splash = false; render() }, 1200);
 render();
 </script>
