@@ -1,0 +1,12 @@
+{
+  "name": "Finans Robotu",
+  "short_name": "Finans",
+  "description": "Kişisel finans yönetimi: harcama, gelir, borç, birikim. Veriler yalnızca cihazda, PIN ile şifreli.",
+  "lang": "tr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#10181e",
+  "theme_color": "#0f5c6e",
+  "icons": [{"src": "ikon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable"}]
+}
