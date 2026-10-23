@@ -1,6 +1,6 @@
 /* Finans Robotu — çevrimdışı çalışma (service worker). Yalnızca uygulama dosyalarını önbelleğe alır; kişisel veri tarayıcının
    yerel deposunda (localStorage / IndexedDB) kalır ve buraya hiç girmez. Yeni sürüm yüklendiğinde arka planda güncellenir. */
-const CACHE = "finans-robotu-v17";
+const CACHE = "finans-robotu-v18";
 const FILES = ["./", "./index.html", "./manifest.webmanifest", "./ikon.svg"];
 self.addEventListener("install", e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES)).then(() => self.skipWaiting())) });
 self.addEventListener("activate", e => { e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== CACHE).map(k => caches.delete(k)))).then(() => self.clients.claim())) });

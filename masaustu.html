@@ -304,6 +304,9 @@ table.rt td b{font-weight:600}
   #pr tr{page-break-inside:avoid}
 }
 
+/* Bulut eşitleme durum satırı */
+.gds{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:13px;color:var(--mu);margin:0 0 10px}
+
 /* ===== Telefon (Y4, v17): aynı tam uygulama; dokunma alanları büyür, pencereler tam ekran, geniş tablolar kart olur ===== */
 @media (max-width:899px){
   button{min-height:44px}
@@ -491,7 +494,7 @@ function cleanP(p) {
 }
 /* Kullanıcı ayarları */
 const VIEWK = ["panel", "gel", "gid", "kasa", "strat", "set"];
-const SETD = () => ({tema: "light", kilit: 5, acilis: "panel", vh: "", gizle: false, ayBas: 1, onay: {ek: true, gel: true, gid: true}, bhedef: null, sonYedek: 0, hat: 14, enf: null, icg: true, rozet: true, kur: false, kurT: 0, icgx: [], koruma: 0, ky: "", kyT: 0});
+const SETD = () => ({tema: "light", kilit: 5, acilis: "panel", vh: "", gizle: false, ayBas: 1, onay: {ek: true, gel: true, gid: true}, bhedef: null, sonYedek: 0, hat: 14, enf: null, icg: true, rozet: true, kur: false, kurT: 0, icgx: [], koruma: 0, ky: "", kyT: 0, gd: {on: false, ver: "", t: 0}});
 function cleanSet(s) {
   const d = SETD();
   s = s && typeof s === "object" ? s : {};
@@ -500,7 +503,7 @@ function cleanSet(s) {
     acilis: VIEWK.includes(ac) ? ac : d.acilis, vh: safeId(s.vh), gizle: !!s.gizle, ayBas: Math.max(1, Math.min(28, Math.round(toN(s.ayBas)) || 1)),
     onay: {ek: on.ek !== false, gel: on.gel !== false, gid: on.gid !== false}, bhedef: s.bhedef == null || s.bhedef === "" ? null : Math.max(0, toN(s.bhedef)),
     sonYedek: Math.max(0, toN(s.sonYedek)), hat: [0, 7, 14, 30].includes(+s.hat) ? +s.hat : d.hat,
-    enf: s.enf == null || s.enf === "" ? null : Math.max(-50, Math.min(500, toN(s.enf))), icg: s.icg !== false, rozet: s.rozet !== false, kur: !!s.kur, kurT: Math.max(0, toN(s.kurT)), icgx: arr(s.icgx).map(x => String(x).slice(0, 80)).slice(-100), koruma: Math.max(0, toN(s.koruma)), ky: String(s.ky || "").slice(0, 80), kyT: Math.max(0, toN(s.kyT))}; // ky: yedek klasörünün adı (tanıtıcı IndexedDB fp-ky'de) · kyT: son klasör yedeğinin zamanı // koruma: kasanın altına inmemesi istenen tutar (kuruş) // icgx: gizlenen içgörü anahtarları
+    enf: s.enf == null || s.enf === "" ? null : Math.max(-50, Math.min(500, toN(s.enf))), icg: s.icg !== false, rozet: s.rozet !== false, kur: !!s.kur, kurT: Math.max(0, toN(s.kurT)), icgx: arr(s.icgx).map(x => String(x).slice(0, 80)).slice(-100), koruma: Math.max(0, toN(s.koruma)), ky: String(s.ky || "").slice(0, 80), kyT: Math.max(0, toN(s.kyT)), gd: {on: !!(s.gd && s.gd.on), ver: String((s.gd && s.gd.ver) || "").slice(0, 40), t: Math.max(0, toN(s.gd && s.gd.t))}}; // gd: Google Drive eşitleme (açık mı, son görülen dosya sürümü, son yüklenen değişiklik zamanı) // ky: yedek klasörünün adı (tanıtıcı IndexedDB fp-ky'de) · kyT: son klasör yedeğinin zamanı // koruma: kasanın altına inmemesi istenen tutar (kuruş) // icgx: gizlenen içgörü anahtarları
   // sonYedek: son şifreli yedek zamanı · hat: yedek hatırlatma aralığı (gün; 0 kapalı) · enf: yıllık enflasyon varsayımı (%) · icg: içgörüler · rozet: rozetler · kur: internetten döviz kuru
 }
 
@@ -701,6 +704,7 @@ function load() {
 /* Kayıt: salt okunur sekme yazmaz; kilit başka sekmeye geçtiyse yazmadan salt okunura döner; hata yutulmaz, yazılan veri okunup doğrulanır */
 function save(keepT) {
   if (!keepT) S.t = Date.now(); // keepT: yalnızca yedek damgası gibi veri sayılmayan bir alan yazılırken son değişiklik zamanı korunur
+  if (!keepT && typeof gdKick === "function") gdKick(); // bulut eşitleme açıksa değişiklik birkaç saniye sonra yüklenir
   snapNow();
   pruneAkt(S);
   if (!KEY || RO) return;
@@ -2935,7 +2939,7 @@ function vStrat() {
 const AKT = {ekle: "Ekleme", duzenle: "Düzenleme", sil: "Silme", odeme: "Ödeme", tahsilat: "Tahsilat", geri: "Geri alma", transfer: "Transfer", ekstre: "Ekstre", gelir: "Gelir onayı", gider: "Gider onayı", fiyat: "Fiyat girişi", ayar: "Ayar", yedek: "Yedek / aktarım", sistem: "Sistem"};
 const KEYS = [["H", "Harcama ekle"], ["G", "Gelir ekle"], ["T", "Transfer"], ["P", "Tutarları gizle / göster"], ["1 – 6", "Menü: Özet, Gelirler, Giderler, Kasa, Strateji, Ayarlar"], ["Esc", "Açık pencereyi kapat"], ["?", "Bu listeyi göster"]];
 let SETV = "", AF = "";
-const SETI = [["yedek", "💾 Yedek al", "Şifreli yedek dosyası"], ["klasor", "📁 Klasöre / buluta yedek", "OneDrive, Google Drive, iCloud, harici bellek"], ["yukle", "📂 Yedek yükle", "Dosyadan yükle ve birleştir"], ["disa", "📤 Dışa aktar", "Excel, PDF veya şifresiz dosya"],
+const SETI = [["yedek", "💾 Yedek al", "Şifreli yedek dosyası"], ["bulut", "☁️ Google Drive eşitleme", "Telefon ve bilgisayar aynı veriyi görsün"], ["klasor", "📁 Klasöre / buluta yedek", "OneDrive, Google Drive, iCloud, harici bellek"], ["yukle", "📂 Yedek yükle", "Dosyadan yükle ve birleştir"], ["disa", "📤 Dışa aktar", "Excel, PDF veya şifresiz dosya"],
   ["gor", "🎨 Görünüm ve kullanım", "Tema, açılış ekranı, tutar gizleme, varsayılan hesap, ay başlangıcı"], ["guv", "🔒 Güvenlik", "PIN değiştir, otomatik kilit"], ["onay", "🔔 Onay pencereleri", "Ekstre, gelir ve gider onayları"],
   ["oran", "📊 Oran tablosu", "KKDF, BSMV, stopaj, asgari ödeme, faiz kademeleri"], ["kat", "🏷️ Kategoriler", "Harcama kategorileri"], ["cal", "💼 Çalışma bilgisi", "Çalışma türü ve sektör"],
   ["log", "📜 İşlem kaydı", "Son 12 ayın tüm veri girişleri"], ["keys", "⌨️ Klavye kısayolları", "Hızlı ekleme ve menü tuşları"], ["veri", "🗂️ Veri işlemleri", "Örnek veri, boşaltma, tümünü silme"], ["den", "🩺 Veri denetimi", "Bakiye, transfer, tekrar kayıt ve tutarsızlık kontrolü"], ["test", "✅ Hesap testleri", "Hesaplama motorunun kontrolleri"]];
@@ -2967,6 +2971,7 @@ function vSet() {
 }
 const SETM = {
   klasor: () => modal(vKlasor()),
+  bulut: () => modal(vBulut()),
   gor: () => modal('<h2 style="margin-top:0">Görünüm ve kullanım</h2><div class="fl">' +
     '<div class="fld"><label>Tema</label><select id="sg_t">' + selO([["auto", "Cihaza göre"], ["light", "Açık"], ["dark", "Koyu"]], S.set.tema) + '</select></div>' +
     '<div class="fld"><label>Açılış ekranı</label><select id="sg_a">' + selO(VIEWK.map(v => [v, document.querySelector('nav [data-t="' + v + '"] .nl').textContent.trim()]), S.set.acilis) + '</select></div>' +
@@ -3770,6 +3775,7 @@ function startIdle() { clearTimeout(IT); const m = S && S.set ? S.set.kilit : 5;
 ["click", "keydown", "touchstart"].forEach(ev => document.addEventListener(ev, () => { if (S) startIdle() }, true));
 function lockP() {
   clearTimeout(IT);
+  if (typeof gdLock === "function") gdLock();
   if (PWR) { PWR(null); PWR = null }
   if (!RO) lockDrop();
   clearInterval(LKT);
@@ -3994,7 +4000,7 @@ function vLogin() {
   if (!L.gir && !L.err && !BUSY) {
     const h = new Date().getHours(), sel = h < 5 ? "İyi geceler" : h < 12 ? "Günaydın" : h < 18 ? "İyi günler" : "İyi akşamlar";
     return '<div class="wz"><div style="font-size:56px;margin-top:6vh">🧮</div><h1>' + sel + ', hoş geldin</h1><p class="mu">Finans ve Borç Robotu: gelirin, giderin, borçların ve kasan tek yerde.</p>' +
-      '<p class="mu">Verilerin yalnızca bu cihazda, PIN ile şifreli duruyor.</p><div class="ac wac"><button class="p" data-a="gir" style="min-width:160px">Giriş yap</button></div></div>';
+      '<p class="mu">Verilerin bu cihazda PIN ile şifreli duruyor.</p><div class="ac wac"><button class="p" data-a="gir" style="min-width:160px">Giriş yap</button></div></div>';
   }
   const lk = Math.ceil((p.until - Date.now()) / 1000);
   const rb = L.bozuk && listBk(p.id).length ? '<div class="ac" style="justify-content:center"><button data-a="bkres0">Önceki sürümün yedeğini geri yükle</button></div>' : "";
@@ -4006,7 +4012,7 @@ function loginClick(a, b) {
   if (a === "gir") { L.gir = true; render(); return true }
   if (a === "wz") { wzGo(b.dataset.k); return true }
   if (a === "unlock") { unlockP().then(render); return true }
-  if (a === "lock") { if (typeof kyDirty === "function" && kyDirty() && !confirm("Son klasör yedeğinden sonra değişiklik var. Yedeklemeden kilitlensin mi? (Vazgeç'e basıp üstteki \"Klasöre yedekle\" düğmesini kullanabilirsin.)")) return true; lockP(); return true }
+  if (a === "lock") { if (typeof kyDirty === "function" && kyDirty() && !confirm("Son klasör yedeğinden sonra değişiklik var. Yedeklemeden kilitlensin mi? (Vazgeç'e basıp üstteki \"Klasöre yedekle\" düğmesini kullanabilirsin.)")) return true; if (typeof gdPending === "function" && gdPending()) { gdSync().finally(() => lockP()); return true } lockP(); return true }
   if (a === "bpok") { pwDone(true); return true }
   if (a === "bpno") { pwDone(false); return true }
   if (a === "bkres0" && !S && PI[0]) { // okunamayan veri: en son taşıma yedeğine dön (şifreli metin olduğu gibi geri konur)
@@ -4126,20 +4132,14 @@ async function readBackup(text) {
   }
   return x;
 }
-/* Güvenli geri yükleme: dosya çözülüp doğrulanır, ne değişeceği gösterilir, onaydan sonra şimdiki verinin yedeği alınır ve ancak ondan sonra birleştirilir */
-async function merge(x) {
-  if (!x || !x.v) return alert("Geçersiz dosya.");
-  if (toN(x.v) > DATA_V) return alert("Bu yedek daha yeni bir uygulama sürümüyle alınmış (veri v" + toN(x.v) + ", bu dosya v" + DATA_V + "). Bilinmeyen alanlar kaybolmasın diye birleştirilmedi; önce uygulamayı güncelle.");
-  const xt = toN(x.t), ek = x.ek && typeof x.ek === "object" ? x.ek : null;
-  x = mig(x);
+/* Birleştirme kuralı (yedek yükleme ve bulut eşitleme ortak): kayıt kimliğine göre birleşim, iki tarafta varsa son değiştirilen (t) kazanır,
+   silinenler del işaretiyle taşınır; oran tablosu ve bütçe, son değişikliği daha yeni olan taraftan alınır. x önceden mig() ile taşınmış olmalı */
+function mergeCount(x) {
   let yeni = 0, guncel = 0;
   COLL.forEach(c => { const m = new Map((S[c] || []).map(r => [r.id, r])); (x[c] || []).forEach(r => { const l = m.get(r.id); if (!l) yeni++; else if ((r.t || 0) > (l.t || 0)) guncel++ }) });
-  const nek = ek ? Object.keys(ek).length : 0;
-  if (!yeni && !guncel && !nek) return alert("Yedekteki kayıtların hepsi zaten burada ve güncel. Değişiklik yapılmadı.");
-  const yeniMi = xt > (S.t || 0) ? "Yedek bu cihazdaki son değişiklikten DAHA YENİ" : "Yedek bu cihazdaki son değişiklikten DAHA ESKİ";
-  if (!confirm("Yedek dosyası doğrulandı.\n" + (xt ? "Yedek: " + new Date(xt).toLocaleString("tr-TR") + " · Bu cihaz: " + new Date(S.t || 0).toLocaleString("tr-TR") + "\n" + yeniMi + ".\n" : "") + "\n" + yeni + " yeni kayıt eklenecek, " + guncel + " kayıt yedekteki daha yeni haliyle güncellenecek" + (nek ? ", " + nek + " fotoğraf yüklenecek" : "") + ".\nBu cihazdaki daha yeni kayıtlar korunur. Önce şimdiki verinin yedeği alınır (Ayarlar → Veri işlemleri → Önceki sürüme dön).\n\nDevam edilsin mi?")) return;
-  if (RO || lockOther()) return alert("Veri şu an başka bir sekmede açık; bu sekme salt okunur. Yedek birleştirilmedi.");
-  try { mkBk(P, DATA_V) } catch (e) { if (!confirm("Şimdiki verinin yedeği alınamadı (" + errTxt(e) + "). Yine de birleştirilsin mi?")) return }
+  return {yeni, guncel};
+}
+function mergeApply(x) {
   if (x.set && x.set.sonYedek > (S.set.sonYedek || 0)) S.set.sonYedek = x.set.sonYedek;
   COLL.forEach(c => {
     const m = new Map((S[c] || []).map(r => [r.id, r]));
@@ -4149,6 +4149,20 @@ async function merge(x) {
   S.kat = [...new Set((S.kat || []).concat(x.kat))];
   S.snap = {...x.snap, ...S.snap};
   if (x.t > S.t) { S.p = x.p; S.bt = x.bt; S.btU = x.btU }
+}
+/* Güvenli geri yükleme: dosya çözülüp doğrulanır, ne değişeceği gösterilir, onaydan sonra şimdiki verinin yedeği alınır ve ancak ondan sonra birleştirilir */
+async function merge(x) {
+  if (!x || !x.v) return alert("Geçersiz dosya.");
+  if (toN(x.v) > DATA_V) return alert("Bu yedek daha yeni bir uygulama sürümüyle alınmış (veri v" + toN(x.v) + ", bu dosya v" + DATA_V + "). Bilinmeyen alanlar kaybolmasın diye birleştirilmedi; önce uygulamayı güncelle.");
+  const xt = toN(x.t), ek = x.ek && typeof x.ek === "object" ? x.ek : null;
+  x = mig(x);
+  const {yeni, guncel} = mergeCount(x), nek = ek ? Object.keys(ek).length : 0;
+  if (!yeni && !guncel && !nek) return alert("Yedekteki kayıtların hepsi zaten burada ve güncel. Değişiklik yapılmadı.");
+  const yeniMi = xt > (S.t || 0) ? "Yedek bu cihazdaki son değişiklikten DAHA YENİ" : "Yedek bu cihazdaki son değişiklikten DAHA ESKİ";
+  if (!confirm("Yedek dosyası doğrulandı.\n" + (xt ? "Yedek: " + new Date(xt).toLocaleString("tr-TR") + " · Bu cihaz: " + new Date(S.t || 0).toLocaleString("tr-TR") + "\n" + yeniMi + ".\n" : "") + "\n" + yeni + " yeni kayıt eklenecek, " + guncel + " kayıt yedekteki daha yeni haliyle güncellenecek" + (nek ? ", " + nek + " fotoğraf yüklenecek" : "") + ".\nBu cihazdaki daha yeni kayıtlar korunur. Önce şimdiki verinin yedeği alınır (Ayarlar → Veri işlemleri → Önceki sürüme dön).\n\nDevam edilsin mi?")) return;
+  if (RO || lockOther()) return alert("Veri şu an başka bir sekmede açık; bu sekme salt okunur. Yedek birleştirilmedi.");
+  try { mkBk(P, DATA_V) } catch (e) { if (!confirm("Şimdiki verinin yedeği alınamadı (" + errTxt(e) + "). Yine de birleştirilsin mi?")) return }
+  mergeApply(x);
   logA("yedek", "veri", "Yedek dosyası birleştirildi (" + yeni + " yeni, " + guncel + " güncel)");
   if (nek) { try { await ekImport(P.id, KEY, ek) } catch (e) { alert("Fotoğraflar yüklenemedi: " + errTxt(e)) } }
   save();
@@ -4242,6 +4256,184 @@ function vKlasor() {
     '<p class="mu">Her yedekte yedek şifresi sorulur ve saklanmaz. Günde bir dosya oluşur (<code>' + kyFile() + '</code>); aynı gün içindeki yedek o dosyanın üzerine yazılır. Eski dosyalar hiç silinmez; istediğinde kendin silebilirsin. Değişiklik olunca ekranın üstünde "Klasöre yedekle" düğmesi çıkar.</p>' +
     '<div class="ac"><button class="p" data-a="kysec">' + (var_ ? "Klasörü değiştir" : "📁 Klasör seç") + '</button>' + (var_ ? '<button data-a="kyrun">Şimdi yedekle</button><button data-a="kyunut">Klasörü bırak</button>' : "") + '<button data-a="no">Kapat</button></div>';
 }
+/* ---------- Bulut eşitleme (v18, PLAN Y5): Google Drive ----------
+   İsteğe bağlıdır; Ayarlar'dan açılmadıkça hiçbir bağlantı yapılmaz. Buluta yalnızca yedek şifresiyle şifrelenmiş dosya gider (biçim şifreli yedekle aynı, fp:2).
+   İzin drive.file: uygulama Drive'da yalnızca kendi oluşturduğu klasörü ve dosyayı görür. Erişim belirteci ve şifreden türetilen anahtar yalnızca bellekte durur.
+   Birleştirme, yedek yüklemeyle aynı kuraldır (mergeCount / mergeApply): kayıt silinmez, iki tarafta varsa son değiştirilen kazanır. */
+const GD_CID = "796356463551-rmamqijf2v4gq8umcvms1r3tq0si0shi.apps.googleusercontent.com", GD_SC = "https://www.googleapis.com/auth/drive.file";
+const GD_API = "https://www.googleapis.com", GD_DIR = "Finans Robotu", GD_FILE = "finans-esitleme.json";
+let GDT = null, GDTX = 0, GDK = null, GDSALT = null, GDIT = BK_IT, GDIR = null, GDBUSY = null, GDAGAIN = false, GDTMR = null, GDLOAD = null;
+// GDT/GDTX: erişim belirteci ve bitişi · GDK/GDSALT/GDIT: eşitleme şifresinden türetilen anahtar, tuz, tur sayısı · GDIR: Drive klasör kimliği (oturumluk)
+const GDST = {d: "", m: "", t: 0}; // durum: "" · run · ok · off (çevrimdışı) · auth (yeniden bağlan) · err
+const gdOn = () => !!(S && S.set.gd && S.set.gd.on);
+const gdReady = () => !!(GDT && GDK);
+const gdPending = () => gdOn() && gdReady() && S.t > (S.set.gd.t || 0);
+const gdErr = (m, kod) => Object.assign(new Error(m), {kod});
+function gdState(d, m) {
+  GDST.d = d; GDST.m = m || ""; if (d === "ok") GDST.t = Date.now();
+  const e = document.getElementById("gdb"); if (e && S) e.outerHTML = gdBanner();
+}
+function gdBanner() {
+  if (!gdOn() || RO) return "";
+  if (!GDLOAD && navigator.onLine) gdLib().catch(() => {}); // giriş bileşeni önceden yüklenir; dokununca açılır pencere engellenmesin
+  if (!gdReady()) return '<div id="gdb" class="w i" style="margin-bottom:10px">☁️ ' + (GDST.d === "auth" || GDST.d === "err" ? esc(GDST.m) : "Google Drive eşitlemesi bu oturumda bağlı değil.") + ' <button class="sm p" data-a="gdbag">Bağlan ve eşitle</button></div>';
+  if (GDST.d === "err" || GDST.d === "off") return '<div id="gdb" class="w' + (GDST.d === "err" ? " r" : "") + '" style="margin-bottom:10px">☁️ ' + esc(GDST.m) + ' <button class="sm" data-a="gdsync">Tekrar dene</button></div>';
+  const z = GDST.t ? new Date(GDST.t).toLocaleTimeString("tr-TR", {hour: "2-digit", minute: "2-digit"}) : "";
+  return '<div id="gdb" class="gds">☁️ ' + (GDST.d === "run" ? "Eşitleniyor…" : gdPending() ? "Değişiklik buluta yüklenecek…" : "Google Drive ile eşitlendi" + (z ? " · " + z : "")) + ' <button class="sm" data-a="gdsync">Şimdi eşitle</button></div>';
+}
+function gdLib() {
+  if (window.google && google.accounts && google.accounts.oauth2) return Promise.resolve();
+  return GDLOAD || (GDLOAD = new Promise((res, rej) => {
+    const s = document.createElement("script"); s.src = "https://accounts.google.com/gsi/client"; s.async = true;
+    s.onload = () => res(); s.onerror = () => { GDLOAD = null; rej(gdErr("Google giriş bileşeni yüklenemedi; internet bağlantını kontrol et.", "net")) };
+    document.head.appendChild(s);
+  }));
+}
+function gdToken() { // Google'ın kendi giriş / izin penceresi; şifre uygulamaya gelmez
+  return new Promise((res, rej) => {
+    const tc = google.accounts.oauth2.initTokenClient({client_id: GD_CID, scope: GD_SC,
+      callback: r => r && r.access_token ? res(r) : rej(gdErr((r && r.error_description) || "izin verilmedi", "auth")),
+      error_callback: e => rej(gdErr(e && e.type === "popup_failed_to_open" ? "giriş penceresi açılamadı; düğmeye bir kez daha dokun" : e && e.type === "popup_closed" ? "giriş penceresi kapatıldı" : "giriş yapılamadı", "auth"))});
+    tc.requestAccessToken({prompt: ""});
+  });
+}
+async function gdF(path, o = {}) {
+  if (!GDT || Date.now() > GDTX - 60000) { GDT = null; throw gdErr("Google oturumunun süresi doldu; yeniden bağlan.", "auth") }
+  let r;
+  try { r = await fetch(GD_API + path, {...o, headers: {Authorization: "Bearer " + GDT, ...(o.headers || {})}}) }
+  catch (e) { throw gdErr("İnternet bağlantısı yok; bağlantı gelince eşitlenecek.", "off") }
+  if (r.status === 401) { GDT = null; throw gdErr("Google oturumunun süresi doldu; yeniden bağlan.", "auth") }
+  if (!r.ok) {
+    let m = ""; try { m = ((await r.json()).error || {}).message || "" } catch (e) {}
+    throw gdErr(/quota|storage/i.test(m) ? "Google Drive alanı dolu; yer açınca tekrar dene." : "Google Drive hatası (" + r.status + (m ? ": " + m : "") + ").", "err");
+  }
+  return r;
+}
+const gdQ = s => "/drive/v3/files?spaces=drive&fields=files(id,version)&q=" + encodeURIComponent(s + " and trashed=false");
+async function gdFind() {
+  if (!GDIR) {
+    const r = await (await gdF(gdQ("name='" + GD_DIR + "' and mimeType='application/vnd.google-apps.folder'"))).json();
+    GDIR = r.files && r.files[0] ? r.files[0].id : (await (await gdF("/drive/v3/files?fields=id", {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({name: GD_DIR, mimeType: "application/vnd.google-apps.folder"})})).json()).id;
+  }
+  const r = await (await gdF(gdQ("name='" + GD_FILE + "' and '" + GDIR + "' in parents"))).json();
+  return r.files && r.files[0] || null;
+}
+const gdGet = async id => (await gdF("/drive/v3/files/" + id + "?alt=media")).json();
+const gdVer = async id => String((await (await gdF("/drive/v3/files/" + id + "?fields=version")).json()).version);
+async function gdPut(id) { // şifreleme anındaki veri yüklenir; yükleme sürerken yapılan değişiklik bir sonraki turda gider
+  const body = JSON.stringify({fp: 2, it: GDIT, salt: b64(GDSALT), ...await sealD(GDK, JSON.stringify(S))}), q = "?fields=id,version";
+  if (id) return (await gdF("/upload/drive/v3/files/" + id + q + "&uploadType=media", {method: "PATCH", headers: {"Content-Type": "application/json"}, body})).json();
+  const b = "fr" + uid() + uid(), meta = JSON.stringify({name: GD_FILE, parents: [GDIR], mimeType: "application/json"});
+  return (await gdF("/upload/drive/v3/files" + q + "&uploadType=multipart", {method: "POST", headers: {"Content-Type": "multipart/related; boundary=" + b},
+    body: "--" + b + "\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n" + meta + "\r\n--" + b + "\r\nContent-Type: application/json\r\n\r\n" + body + "\r\n--" + b + "--"})).json();
+}
+async function gdOpen(x0) { // buluttaki dosya → veri; birleştirilebilir mi kontrol edilir
+  let x;
+  try { x = JSON.parse(await openD(GDK, x0)) } catch (e) { GDK = null; throw gdErr("Buluttaki dosya bu şifreyle açılamadı; yeniden bağlanıp diğer cihazdaki eşitleme şifresini gir.", "err") }
+  if (!x || !x.v) throw gdErr("Buluttaki dosya geçersiz; eşitleme durduruldu.", "err");
+  if (toN(x.v) > DATA_V) throw gdErr("Buluttaki veri daha yeni bir uygulama sürümüyle yazılmış; bu cihazda sayfayı yenileyip güncelle. Eşitleme durduruldu.", "err");
+  return mig(x);
+}
+function gdMerge(x) { // değişiklik varsa uygular ve true döner; aynıysa hiçbir şey yazmaz (iki cihaz arasında boşuna gidip gelme olmaz)
+  const n = mergeCount(x), pDiff = x.t > S.t && (canon(x.p) !== canon(S.p) || canon(x.bt) !== canon(S.bt) || canon(x.btU) !== canon(S.btU));
+  if (!n.yeni && !n.guncel && !pDiff) return false;
+  mergeApply(x);
+  logA("yedek", "veri", "Google Drive'dan birleştirildi (" + n.yeni + " yeni, " + n.guncel + " güncel)");
+  save(); render();
+  return true;
+}
+/* Eşitleme turu: buluttaki dosya başka cihazca değiştiyse indir-birleştir; bu cihazda yüklenmemiş değişiklik varsa yükle.
+   Yüklemeden hemen önce sürüm yeniden okunur; arada başka cihaz yazdıysa tur baştan yapılır (en çok 3 kez). */
+function gdSync() {
+  if (!gdOn() || !gdReady() || RO || !S) return Promise.resolve();
+  if (GDBUSY) { GDAGAIN = true; return GDBUSY }
+  const sid = SID, alive = () => SID === sid && !!S;
+  GDBUSY = (async () => {
+    gdState("run");
+    try {
+      for (let i = 0; i < 3; i++) {
+        const g = S.set.gd, f = await gdFind(); if (!alive()) return;
+        const pend = !f || S.t > (g.t || 0);
+        if (f && String(f.version) !== g.ver) {
+          const x = await gdOpen(await gdGet(f.id)); if (!alive()) return;
+          gdMerge(x); g.ver = String(f.version); if (!pend) g.t = S.t; save(true);
+        }
+        if (!pend && !(S.t > (g.t || 0))) break;
+        if (f && await gdVer(f.id) !== g.ver) continue; // arada başka cihaz yazdı
+        if (!alive()) return;
+        const tt = S.t, r = await gdPut(f && f.id); if (!alive()) return;
+        g.ver = String(r.version); g.t = tt; save(true);
+        break;
+      }
+      gdState("ok");
+    } catch (e) {
+      if (!alive()) return;
+      gdState(e.kod === "off" ? "off" : e.kod === "auth" ? "auth" : "err", e.message || "eşitleme hatası");
+    } finally {
+      GDBUSY = null;
+      if (GDAGAIN && alive()) { GDAGAIN = false; gdKick(500) }
+    }
+  })();
+  return GDBUSY;
+}
+function gdKick(ms) { if (!gdOn() || !gdReady()) return; clearTimeout(GDTMR); GDTMR = setTimeout(gdSync, ms == null ? 4000 : ms) }
+/* Bağlan: Google izni (dokunuşla), eşitleme şifresi (oturumda bir kez), ilk bağlantıda birleştirme onayı, sonra eşitleme */
+async function gdBag() {
+  if (RO) return alert("Bu sekme salt okunur; eşitleme, verinin açık olduğu sekmeden yapılır.");
+  if (!navigator.onLine) return alert("İnternet bağlantısı yok.");
+  try {
+    await gdLib();
+    const tok = await gdToken();
+    if (!google.accounts.oauth2.hasGrantedAllScopes(tok, GD_SC)) throw gdErr("Drive izni verilmedi. Bağlanırken izin ekranında Google Drive kutusunu işaretle.", "auth");
+    GDT = tok.access_token; GDTX = Date.now() + (toN(tok.expires_in) || 3600) * 1000;
+    gdState("run", "Bağlanıyor…");
+    const f = await gdFind(), ilk = !S.set.gd.ver;
+    if (!GDK) {
+      if (f) {
+        const x0 = await gdGet(f.id);
+        for (;;) {
+          const pw = await askPw("Bulut eşitleme şifresi", false);
+          if (!pw) { gdState("", ""); return }
+          const it = Math.min(Math.max(toN(x0.it) || BK_IT, 1000), 5000000), k2 = await dk(pw, ub(x0.salt), it);
+          try { await openD(k2, x0); GDK = k2; GDSALT = ub(x0.salt); GDIT = it; break } catch (e) { alert("Şifre yanlış: buluttaki dosya bu şifreyle açılamadı. Diğer cihazda belirlediğin eşitleme şifresini gir.") }
+        }
+        if (ilk) {
+          const x = await gdOpen(x0), n = mergeCount(x), yer = COLL.reduce((s, c) => s + live(S[c] || []).length, 0);
+          if (!confirm("Google Drive'da eşitleme dosyası bulundu (" + new Date(toN(x.t)).toLocaleString("tr-TR") + ").\n\nBuluttan bu cihaza " + n.yeni + " yeni kayıt gelecek, " + n.guncel + " kayıt güncellenecek. Bu cihazdaki " + yer + " kayıt da buluta eklenecek; hiçbir kayıt silinmez.\n\nBu cihazda örnek veri varsa Vazgeç'e bas, önce Ayarlar → Veri işlemleri → Verileri boşalt.\n\nDevam edilsin mi?")) { GDK = null; gdState("", ""); return }
+          try { localStorage.setItem("fp-es-" + P.id, JSON.stringify({v: DATA_V, t: Date.now(), salt: P.salt, blob: localStorage.getItem("fp-d-" + P.id)})) } catch (e) {} // ilk birleştirmeden önceki hal
+        }
+      } else {
+        const pw = await askPw("Bulut eşitleme şifresi belirle", true);
+        if (!pw) { gdState("", ""); return }
+        GDSALT = crypto.getRandomValues(new Uint8Array(16)); GDIT = BK_IT; GDK = await dk(pw, GDSALT, GDIT);
+      }
+    }
+    if (!S.set.gd.on) { S.set.gd.on = true; logA("ayar", "veri", "Google Drive eşitlemesi açıldı") }
+    save(true);
+    await gdSync();
+    render();
+  } catch (e) { gdState(e.kod === "off" ? "off" : "auth", (e.message || "bağlanılamadı")); render() }
+}
+function gdKes() {
+  try { if (GDT && window.google && google.accounts) google.accounts.oauth2.revoke(GDT, () => {}) } catch (e) {}
+  GDT = null; GDK = null; GDSALT = null; GDIR = null; clearTimeout(GDTMR); GDST.d = ""; GDST.m = ""; GDST.t = 0;
+  S.set.gd = {on: false, ver: "", t: 0};
+  logA("ayar", "veri", "Google Drive eşitlemesi kapatıldı (Drive'daki dosya silinmedi)"); save();
+}
+function gdLock() { GDT = null; GDK = null; GDSALT = null; GDIR = null; clearTimeout(GDTMR); GDST.d = ""; GDST.m = "" } // kilitlenince belirteç ve anahtar bellekten silinir
+function vBulut() {
+  const on = gdOn(), es = (() => { try { return JSON.parse(localStorage.getItem("fp-es-" + P.id)) } catch (e) { return null } })();
+  return '<h2 style="margin-top:0">☁️ Google Drive eşitleme</h2>' +
+    '<p class="mu">Telefon ve bilgisayar aynı veriyi görsün diye şifreli bir dosya Google Drive\'ında "' + GD_DIR + '" klasöründe tutulur. Açılışta buluttaki son hal indirilip birleştirilir, değişiklikler birkaç saniye içinde yüklenir.</p>' +
+    '<div class="w i"><b>Gizlilik:</b> Bu özellik açıkken uygulama Google\'a bağlanır (accounts.google.com, www.googleapis.com). Buluta yalnızca <b>eşitleme şifrenle şifrelenmiş</b> dosya gider; Google içeriği okuyamaz, dosyanın adını, boyutunu ve zamanını görür. Uygulama Drive\'ında yalnızca kendi klasörünü görebilir. Giriş Google\'ın kendi penceresinde yapılır.</div>' +
+    '<ul class="mu" style="padding-left:18px"><li>Eşitleme şifresi her cihazda <b>aynı</b> olmalı; her oturumda bir kez sorulur ve saklanmaz. Unutursan buluttaki dosya açılamaz.</li><li>Kayıtlar silinmez; aynı kayıt iki cihazda değiştiyse son değiştirilen kalır. Fiş fotoğrafları eşitlenmez.</li><li>Drive dosyanın eski sürümlerini bir süre saklar.</li></ul>' +
+    '<div class="ln"><span>Durum</span><span>' + (on ? (gdReady() ? "bağlı" + (GDST.t ? " · son eşitleme " + new Date(GDST.t).toLocaleTimeString("tr-TR", {hour: "2-digit", minute: "2-digit"}) : "") : "açık, bu oturumda bağlı değil") : "kapalı") + '</span></div>' +
+    '<div class="ac"><button class="p" data-a="gdbag">' + (on ? (gdReady() ? "Şimdi eşitle" : "Bağlan ve eşitle") : "Google Drive'a bağlan") + '</button>' + (on ? '<button data-a="gdkes">Eşitlemeyi kapat</button>' : "") + '<button data-a="no">Kapat</button></div>' +
+    (!on && es && es.blob ? '<h3>Eşitlemeden önceki hal</h3><div class="ln"><span>İlk birleştirmeden önce · ' + new Date(es.t).toLocaleString("tr-TR", {dateStyle: "short", timeStyle: "short"}) + '</span><span><button class="sm" data-a="bkres" data-k="fp-es-' + esc(P.id) + '">Geri yükle</button></span></div>' : "");
+}
+setInterval(() => { if (document.visibilityState === "visible") gdSync() }, 90000); // başka cihazın değişikliklerini almak için
+document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") gdSync() });
+addEventListener("online", () => gdSync());
 /* ---------- Ortak işlem yönlendirici: veri değiştiren ve pencere açan tıklamalar (PC ve telefon aynı) ----------
    Arayüzün kendi tıklama dinleyicisi önce gezinmeyi işler, sonra actCommon() çağırır; işlendiyse true döner. */
 const RO_OK = ["tab", "navTo", "gs", "gl", "hs", "hf", "hfa", "sort", "sortx", "menu", "lock", "std", "setb", "bqx", "bqm", "bqok", "no", "nwno", "rotake", "xx", "xp", "birm", "gz", "th", "tag", "calnav", "cald", "fltx", "fab", "foto", "yedekal", "mt", "myedek", "mden", "cbok", "enfm", "tahn", "tahk", "mtah", "labo", "labx", "labsel", "stry", "mstr"];
@@ -4494,6 +4686,9 @@ document.addEventListener("click", e => {
   if (a !== "fab") $("#fabm").classList.remove("on"); // hızlı işlem menüsü başka bir yere basınca kapanır
   if (a === "fab") { const on = $("#fabm").classList.toggle("on"); $("#fab").setAttribute("aria-expanded", on); return }
   if (roBlock(a, c)) return;
+  if (a === "gdbag") { closeM(); if (gdReady()) gdSync().then(render); else gdBag(); return }
+  if (a === "gdsync") { if (gdReady()) gdSync(); else gdBag(); return }
+  if (a === "gdkes") { if (confirm("Google Drive eşitlemesi kapatılsın mı? Bu cihazdaki ve Drive'daki veriler silinmez.")) { gdKes(); closeM(); render() } return }
   if (a === "kysec") { kyPick().then(ok => { if (ok) modal(vKlasor()); render() }); return }
   if (a === "kyrun") { closeM(); kyRun(); return }
   if (a === "kyunut") { if (confirm("Bu klasöre artık yedek yazılmasın mı? Klasördeki dosyalar silinmez.")) kyForget().then(() => { closeM(); render() }); return }
@@ -4554,7 +4749,7 @@ function render() {
   $("#top").innerHTML = topBar();
   const q = EKQ && !RO; // açılıştan sonraki ilk çizim; salt okunur sekmede otomatik işlem ve onay yok
   if (q) { EKQ = false; autoRun(); save() } // onay gerektirmeyen gelir/giderler sormadan işlenir
-  $("#app").innerHTML = kyBanner() + safetyBanner() + (VIEWS[T] || vPanel)();
+  $("#app").innerHTML = gdBanner() + kyBanner() + safetyBanner() + (VIEWS[T] || vPanel)();
   $("#gz").textContent = S.set.gizle ? "🙈" : "👁";
   $("#th").textContent = THI[S.set.tema]; $("#th").title = "Tema: " + THL[S.set.tema] + " (değiştirmek için bas)";
   document.querySelectorAll("nav button").forEach(b => b.classList.toggle("on", b.dataset.t === T));
